@@ -2,425 +2,975 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#102a43">
-<title>Rushikesh Fit Plan</title>
-<style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172b4d}
-header{background:#102a43;color:white;padding:22px 16px;border-radius:0 0 22px 22px}
-h1{margin:0 0 7px;font-size:25px}h2{font-size:20px}h3{font-size:16px}
-header p{margin:5px 0;color:#dbeafe;font-size:13px}
-main{max-width:720px;margin:auto;padding:14px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat,.card{background:white;padding:14px;border-radius:14px;margin-bottom:12px;border:1px solid #e2e8f0}
-.stat b{display:block;font-size:18px;color:#0f766e}.stat small{font-size:11px;color:#64748b}
-nav{display:flex;gap:6px;overflow:auto;padding:12px 0;position:sticky;top:0;background:#f1f5f9;z-index:2}
-button,select,input{font:inherit}
-nav button{padding:10px 13px;border:0;border-radius:20px;background:white;white-space:nowrap}
-nav button.active{background:#102a43;color:white}
-button.action{border:0;border-radius:9px;padding:11px 14px;background:#0f766e;color:white;font-weight:bold}
-button.light{background:#e2e8f0;color:#102a43}
-label.item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #edf2f7;align-items:flex-start}
-.item input{width:19px;height:19px;accent-color:#0f766e;flex-shrink:0}
-.item span{flex:1}.item small{display:block;color:#64748b;margin-top:4px;line-height:1.4}
-.muted{color:#64748b;font-size:13px;line-height:1.5}
-.progress{height:8px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:10px 0}
-.progress div{height:100%;width:0;background:#0f766e}
-.field{display:block;margin:10px 0;font-size:13px;color:#64748b}
-.field input,.field select{display:block;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;background:white;color:#172b4d}
-section{display:none}section.active{display:block}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{text-align:left;padding:9px 4px;border-bottom:1px solid #e2e8f0}
-th{color:#64748b}
-.water{font-size:26px;font-weight:bold;color:#0f766e}
-.chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
-.chips button{border:1px solid #b6d7d2;border-radius:9px;background:white;padding:10px}
-.note{background:#fff7df;padding:12px;border-radius:10px;font-size:12px;line-height:1.5}
-.exercise{padding:10px 0;border-bottom:1px solid #e2e8f0}
-.exercise b{display:block}.exercise small{color:#64748b}
-  
-.exercise-name {
-  color: #102a43;
-  background: none;
-  border: 0;
-  padding: 0;
-  text-align: left;
-  font-weight: bold;
-  font-size: inherit;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  cursor: pointer;
-}
-
-.exercise-popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(15, 23, 42, 0.7);
-  padding: 18px;
-  overflow-y: auto;
-  align-items: center;
-  justify-content: center;
-}
-
-.exercise-popup.open {
-  display: flex;
-}
-
-.exercise-popup-card {
-  background: white;
-  border-radius: 18px;
-  padding: 20px;
-  width: 100%;
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.exercise-popup-card img {
-  display: block;
-  width: 100%;
-  max-height: 300px;
-  object-fit: contain;
-  border-radius: 12px;
-  background: #f1f5f9;
-  margin: 12px 0;
-}
-
-.exercise-popup-card p {
-  line-height: 1.6;
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>My Fitness Dashboard</title>
+  <style>
+    :root {
+      --bg:#0b1220; --panel:#121d2f; --panel2:#17243a;
+      --text:#f3f6fb; --muted:#a9b7cb; --line:#2a3a53;
+      --accent:#65e6ad; --accent-dark:#163f35; --blue:#7db5ff;
+      --danger:#ff8f8f;
+    }
+    * { box-sizing:border-box; }
+    body {
+      margin:0; background:radial-gradient(circle at top,#172842 0,var(--bg) 48%);
+      color:var(--text); font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    .wrap { width:min(100% - 24px,980px); margin:auto; padding:22px 0 50px; }
+    header { margin-bottom:18px; }
+    h1 { font-size:clamp(1.65rem,5vw,2.25rem); margin:0 0 5px; }
+    h2 { font-size:1.15rem; margin:0 0 12px; }
+    h3 { font-size:1rem; margin:0 0 8px; }
+    p { margin:6px 0; }
+    .sub,.muted { color:var(--muted); }
+    .sub { font-size:.94rem; }
+    .nav,.actions { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
+    button,input,select,textarea { font:inherit; }
+    button {
+      cursor:pointer; border:1px solid var(--line); border-radius:11px;
+      padding:10px 13px; color:var(--text); background:var(--panel2); min-height:42px;
+    }
+    button:focus-visible,input:focus-visible,select:focus-visible {
+      outline:2px solid var(--accent); outline-offset:2px;
+    }
+    button.primary { background:var(--accent); color:#082018; border-color:var(--accent); font-weight:700; }
+    button.active { background:var(--accent-dark); border-color:var(--accent); color:var(--accent); }
+    button.small { min-height:34px; padding:6px 9px; font-size:.9rem; }
+    button.danger { color:var(--danger); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+    .card { background:rgba(18,29,47,.96); border:1px solid var(--line); border-radius:16px; padding:16px; min-width:0; }
+    .wide { grid-column:1/-1; }
+    .statrow { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-bottom:14px; }
+    .stat { padding:13px; border-radius:13px; background:var(--panel2); border:1px solid var(--line); }
+    .stat strong { display:block; font-size:1.3rem; }
+    .stat span { color:var(--muted); font-size:.82rem; }
+    .progress { height:9px; border-radius:99px; background:#26364d; overflow:hidden; margin:10px 0 5px; }
+    .progress>div { height:100%; width:0; background:var(--accent); transition:width .2s; }
+    .exercise-list,.checklist { display:grid; gap:8px; }
+    .exercise-row,.checkrow {
+      display:flex; align-items:center; gap:10px; border:1px solid var(--line);
+      border-radius:12px; padding:10px; background:#101a2a;
+    }
+    .exercise-row { justify-content:space-between; }
+    .exercise-name { text-align:left; flex:1; background:transparent; border:0; padding:5px 0; min-height:auto; }
+    .exercise-name strong { display:block; color:var(--blue); }
+    .exercise-name span,.checkrow small { display:block; color:var(--muted); font-size:.84rem; }
+    .checkrow input[type="checkbox"] { width:20px; height:20px; accent-color:var(--accent); flex:0 0 auto; }
+    .checkrow label { flex:1; }
+    .fieldgrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .field { display:grid; gap:5px; }
+    .field label { color:var(--muted); font-size:.88rem; }
+    input,select,textarea {
+      width:100%; border:1px solid var(--line); background:#0c1524; color:var(--text);
+      border-radius:10px; padding:10px 11px; min-height:42px;
+    }
+    .actions { margin-top:12px; }
+    .notice { border-left:3px solid var(--blue); background:#13243a; padding:10px 12px; border-radius:8px; font-size:.9rem; }
+    .meal { margin-bottom:14px; }
+    .meal h3 { color:var(--accent); }
+    .water-count { font-size:2rem; font-weight:800; }
+    .history-item { padding:11px 0; border-bottom:1px solid var(--line); }
+    .history-item:last-child { border-bottom:0; }
+    .history-item strong { display:block; }
+    .hidden { display:none !important; }
+    .modal-backdrop {
+      position:fixed; inset:0; z-index:50; display:flex; align-items:center;
+      justify-content:center; padding:14px; background:rgba(0,0,0,.76);
+    }
+    .modal {
+      width:min(100%,620px); max-height:90vh; overflow:auto; background:var(--panel);
+      border:1px solid var(--line); border-radius:18px; padding:18px;
+    }
+    .modal-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .modal img { display:block; width:100%; max-height:280px; object-fit:contain; border-radius:12px; background:#0c1524; margin:12px 0; }
+    .steps { padding-left:22px; }
+    .steps li { margin:6px 0; }
+    .footer { margin-top:20px; color:var(--muted); font-size:.82rem; text-align:center; }
+    @media(max-width:620px) {
+      .grid { grid-template-columns:1fr; }
+      .wide { grid-column:auto; }
+      .statrow { gap:7px; }
+      .stat { padding:10px; }
+      .stat strong { font-size:1.1rem; }
+      .card { padding:13px; }
+      .fieldgrid { grid-template-columns:1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
-<header>
-<h1>Rushikesh Fit Plan 💪</h1>
-<p>Fat loss • Muscle retention • Strong abs</p>
-<p>Current weight: 76 kg | Initial goal: 65–68 kg</p>
-</header>
-<main>
-<div class="stats">
-<div class="stat"><b>2,000</b><small>Daily kcal target</small></div>
-<div class="stat"><b>130–150 g</b><small>Protein target</small></div>
-<div class="stat"><b id="percent">0%</b><small>Checklist complete</small></div>
-</div>
+<main class="wrap">
+  <header>
+    <h1>My Fitness Dashboard</h1>
+    <p class="sub">Workout • nutrition • hydration • progress — saved in this browser.</p>
+  </header>
 
-<nav>
-<button class="active" data-tab="today">Today</button>
-<button data-tab="workouts">Workouts</button>
-<button data-tab="food">Diet plan</button>
-<button data-tab="water">Water & alerts</button>
-<button data-tab="progress">Progress</button>
-</nav>
+  <nav class="nav" aria-label="Sections">
+    <button class="active" data-view="dashboard">Dashboard</button>
+    <button data-view="workout">Workout</button>
+    <button data-view="diet">Diet</button>
+    <button data-view="water">Water</button>
+    <button data-view="progress">Progress</button>
+  </nav>
 
-<section id="today" class="active">
-<h2 id="todayHeading">Today's plan</h2>
-<div class="card">
-<h3 id="dayTitle"></h3><p class="muted" id="dayFocus"></p>
-<div id="dailyTasks"></div>
-<div class="progress"><div id="dayBar"></div></div>
-<p class="muted" id="dayCount"></p>
-</div>
-<div class="card"><h3>Daily habits</h3><div id="habits"></div></div>
-<div class="note">Fat cannot be removed from only the buttocks or love handles. Overall fat loss, strength training, nutrition and sleep are the priorities.</div>
-</section>
+  <section id="view-dashboard" class="view">
+    <div class="statrow">
+      <div class="stat"><span>Today's workout</span><strong id="dashWorkout">—</strong></div>
+      <div class="stat"><span>Water</span><strong id="dashWater">0 ml</strong></div>
+      <div class="stat"><span>Protein logged</span><strong id="dashProtein">0 g</strong></div>
+    </div>
+    <div class="grid">
+      <article class="card">
+        <h2>Today's checklist</h2>
+        <p class="sub" id="todayLabel"></p>
+        <div class="progress"><div id="dayProgress"></div></div>
+        <p class="sub" id="progressText">0% complete</p>
+        <div class="actions">
+          <button class="primary" onclick="showView('workout')">Open workout</button>
+          <button onclick="showView('diet')">Open diet</button>
+        </div>
+      </article>
 
-<section id="workouts">
-<h2>Workout planner</h2>
-<label class="field">Choose a day
-<select id="workoutDay">
-<option value="mon">Monday — Push A</option>
-<option value="tue">Tuesday — Pull A</option>
-<option value="wed">Wednesday — Legs + Core A</option>
-<option value="thu">Thursday — Push B</option>
-<option value="fri">Friday — Pull B</option>
-<option value="sat">Saturday — Legs + Core B</option>
-<option value="sun">Sunday — Recovery</option>
-</select></label>
-<div class="card"><h3 id="workoutTitle"></h3><p class="muted">Warm up for 5–10 minutes. Use manageable weights and maintain proper form.</p><div id="exerciseList"></div></div>
-<div class="note">Stop if you experience sharp pain. Ask a qualified gym trainer to check your technique on squats, presses and deadlifts.</div>
-</section>
+      <article class="card">
+        <h2>Quick water log</h2>
+        <div class="water-count" id="dashGlasses">0 ml</div>
+        <p class="sub">Daily target: <span id="dashWaterTarget">2500</span> ml</p>
+        <div class="actions">
+          <button class="primary" onclick="addWater(250)">+250 ml</button>
+          <button onclick="addWater(500)">+500 ml</button>
+        </div>
+      </article>
 
-<section id="food">
-<h2>Daily diet checklist</h2>
-<p class="muted">Quantities are in grams. Meat is weighed cooked; oats and atta are weighed dry. Calories are estimates.</p>
-<div class="card"><div id="meals"></div>
-<div class="progress"><div id="foodBar"></div></div>
-<p class="muted" id="foodCount"></p></div>
-<div class="card"><h3>Portion reference</h3>
-<table>
-<tr><th>Food</th><th>Amount</th><th>Weight type</th></tr>
-<tr><td>Whole eggs</td><td>5 daily</td><td>Count large eggs</td></tr>
-<tr><td>Egg whites</td><td>3</td><td>Count</td></tr>
-<tr><td>Oats</td><td>40 g</td><td>Dry</td></tr>
-<tr><td>Roasted chana</td><td>30 g</td><td>Ready to eat</td></tr>
-<tr><td>Banana</td><td>100–120 g each</td><td>Edible portion</td></tr>
-<tr><td>Chicken</td><td>150 g lunch + 100 g dinner</td><td>Cooked</td></tr>
-<tr><td>Atta</td><td>60 g lunch + 30 g dinner</td><td>Dry flour</td></tr>
-<tr><td>Dal</td><td>100 g</td><td>Cooked</td></tr>
-<tr><td>Vegetables and salad</td><td>350 g</td><td>Ready to eat</td></tr>
-<tr><td>Low-fat milk</td><td>200 ml optional</td><td>Measure liquid</td></tr>
-</table>
-<p class="muted">Actual calories vary by food brand, cooking oil, chicken cut and portion size. Track everything you eat to stay near 2,000 kcal and 130–150 g protein. The sample menu may need adjustment to meet both targets.</p>
-</div>
-</section>
+      <article class="card wide">
+        <h2>Today's meals</h2>
+        <p class="sub">Tick a meal after eating it. Protein values are estimates.</p>
+        <div id="dashboardMeals"></div>
+        <button onclick="showView('diet')">Manage diet</button>
+      </article>
 
-<section id="water">
-<h2>Water tracker 💧</h2>
-<div class="card">
-<div class="water"><span id="waterTotal">0</span> / <span id="waterGoalText">3000</span> ml</div>
-<div class="progress"><div id="waterBar"></div></div>
-<label class="field">Daily water goal (ml)<input id="waterGoal" type="number" value="3000" min="1000" max="5000" step="250"></label>
-<label class="field">Glass size<select id="glassSize"><option value="150">150 ml</option><option value="200" selected>200 ml</option><option value="250">250 ml</option><option value="300">300 ml</option><option value="500">500 ml</option></select></label>
-<div class="chips" id="waterButtons"></div>
-<button class="action light" id="undoWater">Undo last glass</button>
-</div>
-<div class="card">
-<h3>Set water reminders</h3>
-<p class="muted">Alerts work while this page stays open. iPhone may stop them if Safari is closed or suspended.</p>
-<label class="field">Start time<input type="time" id="startTime" value="08:00"></label>
-<label class="field">End time<input type="time" id="endTime" value="21:00"></label>
-<label class="field">Repeat every<select id="interval"><option value="60">1 hour</option><option value="90">90 minutes</option><option value="120" selected>2 hours</option><option value="150">2.5 hours</option></select></label>
-<label class="field">Reminder type<select id="reminderType"><option value="water">Drink water</option><option value="move">Stand and move</option><option value="both">Water and movement</option></select></label>
-<button class="action" id="enableAlerts">Enable reminders</button>
-<button class="action light" id="stopAlerts">Stop</button>
-<p class="muted" id="alertStatus">Reminders are off.</p>
-<div class="note">Drink steadily according to thirst, heat and exercise. Do not force excessive water. Follow medical advice if you have a fluid restriction.</div>
-</div>
-</section>
+      <article class="card wide">
+        <h2>Water reminder settings</h2>
+        <p class="sub">Reminders only work while this page is active. iPhone Safari may suspend them in the background.</p>
+        <div class="fieldgrid">
+          <div class="field"><label for="waterTarget">Daily water target (ml)</label><input id="waterTarget" type="number" min="250" step="250" value="2500"></div>
+          <div class="field"><label for="reminderMinutes">Reminder interval (minutes)</label><input id="reminderMinutes" type="number" min="15" max="240" step="15" value="60"></div>
+        </div>
+        <div class="actions">
+          <button class="primary" onclick="saveSettings()">Save settings</button>
+          <button onclick="startReminders()">Start reminders</button>
+          <button onclick="stopReminders()">Stop reminders</button>
+        </div>
+        <p id="reminderStatus" class="sub" aria-live="polite"></p>
+      </article>
+    </div>
+  </section>
 
-<section id="progress">
-<h2>Progress tracker</h2>
-<div class="card">
-<label class="field">Date<input type="date" id="logDate"></label>
-<label class="field">Weight (kg)<input type="number" id="weight" min="30" max="250" step="0.1" placeholder="76.0"></label>
-<label class="field">Waist measurement (cm)<input type="number" id="waist" min="30" max="200" step="0.1" placeholder="Enter waist"></label>
-<button class="action" id="saveProgress">Save entry</button>
-</div>
-<div class="card"><h3>History</h3><div id="history"></div>
-<button class="action light" id="export">Export backup</button>
-</div>
-</section>
-<p class="muted">Your checklist and progress are saved in this browser on this device. Export a backup regularly.</p>
+  <section id="view-workout" class="view hidden">
+    <article class="card">
+      <h2>Workout plan</h2>
+      <p class="sub">Select a day, tick completed exercises, and tap an exercise name for its guide.</p>
+      <div class="nav" id="workoutTabs">
+        <button class="active" data-day="Push">Push</button>
+        <button data-day="Pull">Pull</button>
+        <button data-day="Legs">Legs</button>
+      </div>
+      <div class="field" style="max-width:260px;margin-bottom:14px">
+        <label for="workoutDate">Workout date</label><input id="workoutDate" type="date">
+      </div>
+      <div id="workoutContent"></div>
+      <div class="actions">
+        <button class="primary" onclick="saveToday()">Save workout</button>
+        <button onclick="resetWorkoutChecks()">Uncheck exercises</button>
+      </div>
+    </article>
+  </section>
+
+  <section id="view-diet" class="view hidden">
+    <article class="card">
+      <h2>Daily nutrition checklist</h2>
+      <p class="sub">Protein figures are estimates. Use actual food labels and portion sizes when possible.</p>
+      <div class="statrow">
+        <div class="stat"><span>Protein checked off</span><strong id="dietProtein">0 g</strong></div>
+        <div class="stat"><span>Protein target</span><strong id="proteinTargetLabel">140 g</strong></div>
+        <div class="stat"><span>Meals completed</span><strong id="mealsDone">0/6</strong></div>
+      </div>
+      <div class="fieldgrid">
+        <div class="field"><label for="proteinTarget">Daily protein target (g)</label><input id="proteinTarget" type="number" min="40" max="300" value="140"></div>
+        <div class="field"><label for="calorieTarget">Daily calorie target (kcal)</label><input id="calorieTarget" type="number" min="800" max="6000" value="2000"></div>
+      </div>
+
+      <h3 style="margin-top:16px">Choose your diet preference</h3>
+      <div class="nav" id="dietTabs">
+        <button class="active" data-diet="veg">Vegetarian</button>
+        <button data-diet="nonveg">Non-vegetarian</button>
+      </div>
+      <p class="sub" id="dietPreferenceLabel">Showing vegetarian meals.</p>
+      <div id="dietContent"></div>
+
+      <div class="actions">
+        <button class="primary" onclick="saveSettings()">Save nutrition targets</button>
+        <button onclick="uncheckMeals()">Uncheck all meals</button>
+      </div>
+      <p class="notice">Fat loss occurs across the body; you cannot choose exactly where fat is lost first. Focus on consistent nutrition, resistance training and recovery.</p>
+    </article>
+  </section>
+
+  <section id="view-water" class="view hidden">
+    <article class="card">
+      <h2>Water tracker</h2>
+      <p class="sub" id="waterDateLabel"></p>
+      <div class="water-count"><span id="waterTotal">0</span> ml</div>
+      <div class="progress"><div id="waterProgress"></div></div>
+      <p class="sub" id="waterProgressText">0% of target</p>
+      <div class="actions">
+        <button class="primary" onclick="addWater(250)">+250 ml</button>
+        <button onclick="addWater(500)">+500 ml</button>
+        <button onclick="addWater(750)">+750 ml</button>
+        <button onclick="undoWater()">Undo last glass</button>
+      </div>
+      <div class="fieldgrid" style="margin-top:14px">
+        <div class="field"><label for="customWater">Custom amount (ml)</label><input id="customWater" type="number" min="1" max="3000" value="250"></div>
+        <button style="align-self:end" onclick="addCustomWater()">Add custom amount</button>
+      </div>
+      <div class="actions"><button class="danger" onclick="resetWater()">Reset today's water</button></div>
+    </article>
+  </section>
+
+  <section id="view-progress" class="view hidden">
+    <div class="grid">
+      <article class="card">
+        <h2>Log body measurements</h2>
+        <div class="fieldgrid">
+          <div class="field"><label for="logDate">Date</label><input id="logDate" type="date"></div>
+          <div class="field"><label for="weight">Weight (kg)</label><input id="weight" type="number" min="20" max="400" step="0.1" placeholder="e.g. 76"></div>
+          <div class="field"><label for="waist">Waist (cm)</label><input id="waist" type="number" min="20" max="250" step="0.1" placeholder="Optional"></div>
+          <div class="field"><label for="hips">Hips (cm)</label><input id="hips" type="number" min="20" max="250" step="0.1" placeholder="Optional"></div>
+        </div>
+        <div class="field" style="margin-top:10px">
+          <label for="notes">Notes</label><textarea id="notes" rows="3" placeholder="Strength, sleep, energy, measurements..."></textarea>
+        </div>
+        <div class="actions"><button class="primary" onclick="saveProgress()">Save progress</button></div>
+      </article>
+
+      <article class="card">
+        <h2>Data backup</h2>
+        <p class="sub">Records are saved in this browser and do not automatically sync to other devices. Export a backup regularly.</p>
+        <div class="actions">
+          <button class="primary" onclick="exportData()">Export all data (JSON)</button>
+          <button onclick="exportProgressCSV()">Export progress (CSV)</button>
+          <button class="danger" onclick="clearAllData()">Delete all app data</button>
+        </div>
+        <p class="sub" id="backupStatus" aria-live="polite"></p>
+      </article>
+
+      <article class="card wide">
+        <h2>Progress history</h2>
+        <div id="historyList"></div>
+      </article>
+    </div>
+  </section>
+
+  <p class="footer">Personal tracker only; not medical advice. Back up your data regularly.</p>
 </main>
 
-<div id="exercisePopup" class="exercise-popup"
-     role="dialog" aria-modal="true"
-     aria-labelledby="exercisePopupTitle">
-  <div class="exercise-popup-card">
-    <h2 id="exercisePopupTitle">Exercise</h2>
-    <img id="exercisePopupImage" alt="Exercise demonstration"
-         hidden>
-    <p id="exercisePopupDescription"></p>
-    <h3>How to perform it</h3>
-    <ol id="exercisePopupSteps"></ol>
-    <button class="action" id="closeExercisePopup"
-            type="button">Close</button>
+<div id="exerciseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle" onclick="if(event.target===this)closeExercise()">
+  <div class="modal">
+    <div class="modal-head">
+      <div><h2 id="modalTitle">Exercise guide</h2><p id="modalMeta" class="sub"></p></div>
+      <button aria-label="Close exercise guide" onclick="closeExercise()">Close ✕</button>
+    </div>
+    <img id="modalImage" class="hidden" alt="Exercise demonstration">
+    <p id="modalDescription"></p>
+    <h3>How to do it</h3>
+    <ol id="modalSteps" class="steps"></ol>
+    <p class="notice" id="modalTip"></p>
+    <p id="modalImageNote" class="sub"></p>
   </div>
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-const keyDate=()=>{let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
-let store={};
-try{store=JSON.parse(localStorage.getItem('rushFit')||'{}')}catch(e){}
-if(!store.days)store.days={};
-function save(){localStorage.setItem('rushFit',JSON.stringify(store))}
-function dayData(){let k=keyDate();if(!store.days[k])store.days[k]={checks:{},water:0,glasses:[]};return store.days[k]}
-const plan={
-mon:{title:'Push A',focus:'Chest, shoulders, triceps',items:[['Bench press','3 × 8–10','Feet planted; lower under control.'],['Incline dumbbell press','3 × 10–12','Keep wrists straight.'],['Shoulder press','2 × 10','Avoid excessive back arch.'],['Lateral raise','3 × 12–15','Do not swing.'],['Chest fly machine','2 × 12–15','Use a comfortable range.'],['Triceps pushdown','3 × 10–12','Elbows by your sides.'],['Brisk walk','10–15 min','Comfortable pace.']]},
-tue:{title:'Pull A',focus:'Back, rear shoulders and biceps',items:[['Lat pulldown','3 × 10–12','Pull to upper chest, not behind neck.'],['Seated cable row','3 × 10–12','Avoid rocking your torso.'],['One-arm dumbbell row','2 × 10/side','Keep your back neutral.'],['Face pull','2 × 12–15','Pull rope toward face.'],['Dumbbell curl','3 × 10–12','Keep upper arms still.'],['Hammer curl','2 × 10–12','Keep wrists neutral.'],['Incline walk','10–20 min','Optional.']]},
-wed:{title:'Legs + Core A',focus:'Legs and abdominal strength',items:[['Goblet squat','3 × 8–10','Knees aligned with toes.'],['Leg press','3 × 10–12','Do not round lower back.'],['Romanian deadlift','3 × 8–10','Hinge at hips; weights near legs.'],['Walking lunges','2 × 10 steps/leg','Move under control.'],['Leg curl','2 × 12–15','Control the return.'],['Calf raise','3 × 12–15','Pause at the top.'],['Forearm plank','3 × 30–45 sec','Keep body straight.'],['Reverse crunch','3 × 10–15','Curl pelvis; do not swing.']]},
-thu:{title:'Push B',focus:'Chest, shoulders and triceps',items:[['Machine chest press','3 × 8–12','Use controlled movement.'],['Incline dumbbell press','3 × 10–12','Do not bounce.'],['Dumbbell shoulder press','2 × 10','Use a manageable load.'],['Cable lateral raise','3 × 12–15','Avoid shrugging.'],['Pec deck','2 × 12–15','Control both directions.'],['Rope triceps pushdown','3 × 10–12','Keep elbows still.'],['Brisk walk','10–15 min','Optional.']]},
-fri:{title:'Pull B',focus:'Back and biceps',items:[['Neutral-grip pulldown','3 × 10–12','Pull elbows down.'],['Chest-supported row','3 × 10–12','Keep chest supported.'],['Seated cable row','2 × 12','Avoid jerking.'],['Reverse fly','2 × 12–15','Control rear shoulders.'],['Cable curl','3 × 10–12','Keep elbows still.'],['Hammer curl','2 × 10–12','Lower slowly.'],['Incline walk','10–20 min','Optional.']]},
-sat:{title:'Legs + Core B',focus:'Legs, core stability and cardio',items:[['Goblet squat or leg press','3 × 10','Use comfortable depth.'],['Light Romanian deadlift','2 × 10','Keep back neutral.'],['Leg extension','2 × 12–15','No kicking.'],['Seated leg curl','2 × 12–15','Control return.'],['Calf raise','3 × 12–15','Full controlled range.'],['Dead bug','2 × 8–12/side','Keep lower back down.'],['Forearm plank','3 × 30–45 sec','Brace abs.'],['Walk or cycle','20–30 min','Moderate pace.']]},
-sun:{title:'Recovery day',focus:'Rest and gentle movement',items:[['Easy walk','20–40 min','Comfortable pace.'],['Gentle mobility','5–10 min','Do not force stretches.'],['Meal prep','10 min','Plan meals for the week.']]}
-};
-const habits=[['Water goal','Log glasses in the Water tab.'],['Protein','Aim for 130–150 g today.'],['Steps','Build toward 8,000–10,000 if comfortable.'],['Sleep','Aim for 7–9 hours.'],['Food tracking','Include oils, drinks and snacks.']];
-const meals=[
-['Breakfast','3 whole eggs + 40 g dry oats + 100–120 g banana','~460–490 kcal; 26–29 g protein'],
-['Snack','30 g roasted chana + 150 g apple','~190–210 kcal; 6–7 g protein'],
-['Lunch','150 g cooked chicken + 60 g dry atta + 100 g cooked dal + 150 g salad + up to 5 g oil','~600–650 kcal; 55–60 g protein'],
-['Pre-workout','100–120 g banana; coffee optional','~90–110 kcal'],
-['Post-workout','2 whole eggs + 3 egg whites','~190–210 kcal; 23–25 g protein'],
-['Dinner','100 g cooked chicken/fish + 200 g vegetables + 30 g dry atta + up to 5 g oil','~350–430 kcal; 30–35 g protein'],
-['Optional','200 ml low-fat milk; count in calories','~90–110 kcal; 6–7 g protein']
-];
-function renderWorkout(k){
+"use strict";
 
-const exerciseHelp = {
-  "Bench press": [
-    "Lie flat on the bench with feet planted. Grip the bar slightly wider than shoulder width.",
-    [
-      "Keep your shoulder blades stable against the bench.",
-      "Lower the bar under control toward your mid-chest.",
-      "Press upward without bouncing the bar."
-    ],
-    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
+const STORAGE_KEY = "myFitnessDashboard_v2";
+
+const todayISO = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+};
+
+const defaultState = () => ({
+  days: {},
+  waterLog: {},
+  progress: [],
+  settings: {
+    waterTarget: 2500,
+    reminderMinutes: 60,
+    proteinTarget: 140,
+    calorieTarget: 2000,
+    dietPreference: "veg"
+  }
+});
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return defaultState();
+    const parsed = JSON.parse(saved);
+    const base = defaultState();
+    return {
+      days: parsed.days && typeof parsed.days === "object" ? parsed.days : {},
+      waterLog: parsed.waterLog && typeof parsed.waterLog === "object" ? parsed.waterLog : {},
+      progress: Array.isArray(parsed.progress) ? parsed.progress : [],
+      settings: { ...base.settings, ...(parsed.settings || {}) }
+    };
+  } catch (error) {
+    return defaultState();
+  }
+}
+
+let state = loadState();
+let selectedWorkout = "Push";
+let selectedDiet = state.settings.dietPreference === "nonveg" ? "nonveg" : "veg";
+let reminderTimer = null;
+
+const workouts = {
+  Push: [
+    ["Bench press", "3 sets × 8–12 reps"],
+    ["Incline dumbbell press", "3 × 8–12"],
+    ["Shoulder press", "3 × 8–12"],
+    ["Lateral raise", "3 × 12–15"],
+    ["Triceps pushdown", "3 × 10–15"],
+    ["Overhead triceps extension", "2 × 10–15"]
   ],
-  "Incline dumbbell press": [
-    "Set the bench to a comfortable incline and hold dumbbells near your upper chest.",
-    [
-      "Keep your feet planted and wrists straight.",
-      "Press the dumbbells upward without banging them together.",
-      "Lower slowly until you reach a comfortable range."
-    ],
-    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg"
+  Pull: [
+    ["Lat pulldown", "3 × 8–12"],
+    ["Seated cable row", "3 × 8–12"],
+    ["One-arm dumbbell row", "3 × 8–12 each side"],
+    ["Face pull", "3 × 12–15"],
+    ["Dumbbell curl", "3 × 10–15"],
+    ["Hammer curl", "2 × 10–15"]
   ],
-  "Lateral raise": [
-    "Stand tall with a light dumbbell in each hand and a slight bend in your elbows.",
-    [
-      "Keep your torso still.",
-      "Raise your arms out to the sides to about shoulder height.",
-      "Lower the weights slowly without swinging."
-    ],
-    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg"
+  Legs: [
+    ["Squat", "3 × 8–12"],
+    ["Leg press", "3 × 10–12"],
+    ["Romanian deadlift", "3 × 8–12"],
+    ["Leg curl", "3 × 10–15"],
+    ["Calf raise", "3 × 12–20"],
+    ["Plank", "3 × 30–60 seconds"]
   ]
 };
 
-function showExercise(name, reps, tip) {
+const mealPlans = {
+  veg: [
+    { id:"breakfast", title:"Breakfast", name:"Greek yogurt or milk with oats; add seeds if desired", protein:20, calories:400 },
+    { id:"snack1", title:"Mid-morning", name:"Sprouts and roasted chana", protein:12, calories:250 },
+    { id:"lunch", title:"Lunch", name:"Dal or beans with paneer/tofu, roti or rice, and vegetables", protein:30, calories:550 },
+    { id:"snack2", title:"Evening snack", name:"Milk, curd, Greek yogurt or roasted chana", protein:15, calories:250 },
+    { id:"dinner", title:"Dinner", name:"Paneer or tofu with vegetables and roti/rice", protein:30, calories:500 },
+    { id:"extra", title:"Optional protein", name:"Add milk, curd, tofu or another protein serving if needed", protein:15, calories:200 }
+  ],
+  nonveg: [
+    { id:"breakfast", title:"Breakfast", name:"Eggs with whole-grain toast or oats and milk", protein:25, calories:400 },
+    { id:"snack1", title:"Mid-morning", name:"Sprouts and roasted chana", protein:12, calories:250 },
+    { id:"lunch", title:"Lunch", name:"Chicken or fish with roti/rice, dal and vegetables", protein:35, calories:550 },
+    { id:"snack2", title:"Evening snack", name:"Greek yogurt, curd or milk", protein:15, calories:250 },
+    { id:"dinner", title:"Dinner", name:"Eggs, chicken or fish with vegetables and roti/rice", protein:35, calories:500 },
+    { id:"extra", title:"Optional protein", name:"Add eggs, milk, curd or another protein serving if needed", protein:20, calories:200 }
+  ]
+};
+
+const meals = () => mealPlans[selectedDiet];
+
+const exerciseHelp = {
+  "Bench press": {
+    desc:"A chest-focused press that also trains the triceps and front shoulders.",
+    steps:["Lie on the bench with feet firmly planted.","Grip the bar slightly wider than shoulder width; keep wrists over elbows.","Lower the bar under control toward mid-chest.","Press upward without bouncing the bar."],
+    tip:"Use a spotter or safety bars. Start with a load you can control.",
+    image:"https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
+  },
+  "Incline dumbbell press": {
+    desc:"A press that emphasizes the upper chest.",
+    steps:["Set the bench to about 20–35 degrees.","Start with dumbbells beside the upper chest and wrists straight.","Press up while keeping shoulders controlled.","Lower slowly to a comfortable stretch."],
+    tip:"Avoid an excessively steep bench angle or painful shoulder range.",
+    image:"https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Incline_Bench_Press/0.jpg"
+  },
+  "Shoulder press": {
+    desc:"A vertical press for shoulders and triceps.",
+    steps:["Sit or stand tall and brace your abdomen.","Start with weights around shoulder height.","Press upward without arching your lower back.","Lower slowly."],
+    tip:"Reduce the load if you need to lean backward."
+  },
+  "Lateral raise": {
+    desc:"An isolation exercise for the side deltoids.",
+    steps:["Hold light dumbbells beside your sides, elbows slightly bent.","Raise your arms out to about shoulder height.","Pause briefly, then lower slowly.","Keep your torso still."],
+    tip:"Use light weights and controlled repetitions.",
+    image:"https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lateral_Raise/0.jpg"
+  },
+  "Triceps pushdown": {
+    desc:"A cable exercise targeting the triceps.",
+    steps:["Keep elbows close to your torso.","Push the handle down by straightening your elbows.","Pause briefly at the bottom.","Return slowly without rocking your body."],
+    tip:"Move at the elbows rather than using body momentum."
+  },
+  "Overhead triceps extension": {
+    desc:"An overhead movement for the triceps.",
+    steps:["Hold a dumbbell securely overhead with both hands.","Keep elbows pointing mostly forward.","Bend your elbows to lower the weight behind your head.","Extend your elbows to return."],
+    tip:"Use a comfortable range and stop if your joints hurt."
+  },
+  "Lat pulldown": {
+    desc:"A vertical pull emphasizing the lats and upper back.",
+    steps:["Secure your thighs under the pads and grip the bar.","Keep your chest lifted and torso slightly leaned back.","Pull the bar toward your upper chest by driving elbows down.","Return slowly."],
+    tip:"Do not pull the bar behind your neck or swing."
+  },
+  "Seated cable row": {
+    desc:"A horizontal pull for the back and biceps.",
+    steps:["Sit tall with knees slightly bent and spine neutral.","Pull the handle toward your lower ribs.","Move elbows back and gently squeeze your shoulder blades.","Extend your arms slowly."],
+    tip:"Avoid momentum and excessive backward leaning."
+  },
+  "One-arm dumbbell row": {
+    desc:"A unilateral back exercise.",
+    steps:["Support yourself on a stable bench or brace with a neutral spine.","Let the dumbbell hang under your shoulder.","Pull your elbow toward your hip without twisting.","Lower slowly and repeat on the other side."],
+    tip:"Keep your hips and shoulders square."
+  },
+  "Face pull": {
+    desc:"A cable movement for rear shoulders and upper back.",
+    steps:["Set a rope attachment around face height.","Pull the rope toward your face with elbows out.","Separate the rope ends while keeping wrists neutral.","Return slowly."],
+    tip:"Use controlled resistance and avoid shrugging."
+  },
+  "Dumbbell curl": {
+    desc:"An elbow-flexion exercise for the biceps.",
+    steps:["Stand tall with elbows near your sides.","Curl the dumbbells without swinging.","Keep wrists neutral.","Lower slowly."],
+    tip:"Do not use your hips to swing the weights."
+  },
+  "Hammer curl": {
+    desc:"A curl variation for the biceps, brachialis and forearms.",
+    steps:["Hold dumbbells with palms facing each other.","Keep elbows near your sides.","Curl without rotating your wrists.","Lower under control."],
+    tip:"Keep your upper arms still."
+  },
+  "Squat": {
+    desc:"A compound lower-body movement for quads, glutes and trunk stability.",
+    steps:["Stand around shoulder-width with toes turned out slightly if comfortable.","Brace your abdomen and sit down between your hips.","Keep feet planted and knees tracking with toes.","Push through your whole foot to stand."],
+    tip:"Use a comfortable, pain-free range and maintain balance."
+  },
+  "Leg press": {
+    desc:"A machine-based lower-body press.",
+    steps:["Place feet about shoulder-width on the platform.","Lower the platform slowly while keeping your pelvis on the pad.","Stop before your lower back rounds or hips lift.","Press up without forcefully locking your knees."],
+    tip:"Never let the sled drop; set safety stops correctly."
+  },
+  "Romanian deadlift": {
+    desc:"A hip hinge for hamstrings, glutes and back strength.",
+    steps:["Hold weights in front of your thighs with knees softly bent.","Push hips backward, keeping weights close to your legs.","Keep your spine neutral and lower until hamstrings stretch.","Drive hips forward to stand."],
+    tip:"Reduce the load if your back rounds."
+  },
+  "Leg curl": {
+    desc:"A machine exercise for the hamstrings.",
+    steps:["Align the machine pivot with your knee joint.","Curl the pad smoothly toward your body.","Pause briefly without lifting your hips.","Return slowly."],
+    tip:"Adjust the machine so the pad sits comfortably."
+  },
+  "Calf raise": {
+    desc:"A lower-leg exercise for the calf muscles.",
+    steps:["Stand with feet hip-width apart and hold support if needed.","Rise onto the balls of your feet.","Pause, then lower slowly.","Avoid bouncing."],
+    tip:"Controlled full-range repetitions are more useful than rushing."
+  },
+  "Plank": {
+    desc:"An isometric core exercise.",
+    steps:["Place elbows under shoulders and extend legs behind you.","Keep head, shoulders, hips and heels in a straight line.","Brace your abdomen and breathe normally.","Stop when you can no longer hold good form."],
+    tip:"Good form matters more than holding for a very long time."
+  }
+};
+
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch (error) {
+    alert("The browser could not save your data. Export a backup if possible.");
+  }
+}
+
+function dayData(date=todayISO()) {
+  if (!state.days[date]) state.days[date] = { workout:"", checks:{}, meals:{} };
+  const d = state.days[date];
+  if (!d.checks || typeof d.checks !== "object") d.checks = {};
+  if (!d.meals || typeof d.meals !== "object") d.meals = {};
+  return d;
+}
+
+function waterData(date=todayISO()) {
+  if (!state.waterLog[date]) state.waterLog[date] = { total:0, entries:[] };
+  const w = state.waterLog[date];
+  if (!Array.isArray(w.entries)) w.entries = [];
+  if (!Number.isFinite(w.total)) w.total = 0;
+  return w;
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, ch => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+  }[ch]));
+}
+
+function showView(view) {
+  document.querySelectorAll(".view").forEach(el =>
+    el.classList.toggle("hidden", el.id !== "view-" + view)
+  );
+  document.querySelectorAll("[data-view]").forEach(btn =>
+    btn.classList.toggle("active", btn.dataset.view === view)
+  );
+  if (view === "dashboard") renderDashboard();
+  if (view === "workout") renderWorkout();
+  if (view === "diet") renderDiet();
+  if (view === "water") renderWater();
+  if (view === "progress") renderHistory();
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+function renderWorkout() {
+  const date = document.getElementById("workoutDate").value || todayISO();
+  const d = dayData(date);
+  if (d.workout && workouts[d.workout]) selectedWorkout = d.workout;
+
+  document.querySelectorAll("[data-day]").forEach(btn =>
+    btn.classList.toggle("active", btn.dataset.day === selectedWorkout)
+  );
+
+  const list = workouts[selectedWorkout];
+  document.getElementById("workoutContent").innerHTML = `
+    <h3>${selectedWorkout} day</h3>
+    <div class="exercise-list">
+      ${list.map((ex,i) => {
+        const checked = Boolean(d.checks[`${selectedWorkout}:${ex[0]}`]);
+        return `<div class="exercise-row">
+          <input type="checkbox" aria-label="Complete ${escapeHTML(ex[0])}" ${checked ? "checked" : ""}
+            onchange="toggleExercise(${i},this.checked)">
+          <button class="exercise-name" onclick="showExercise('${escapeHTML(ex[0])}')">
+            <strong>${escapeHTML(ex[0])}</strong>
+            <span>${escapeHTML(ex[1])} · Tap for technique</span>
+          </button>
+        </div>`;
+      }).join("")}
+    </div>`;
+  d.workout = selectedWorkout;
+  persist();
+  renderDashboard();
+}
+
+function toggleExercise(index, checked) {
+  const date = document.getElementById("workoutDate").value || todayISO();
+  const d = dayData(date);
+  const name = workouts[selectedWorkout][index][0];
+  d.workout = selectedWorkout;
+  d.checks[`${selectedWorkout}:${name}`] = checked;
+  persist();
+  renderWorkout();
+}
+
+function resetWorkoutChecks() {
+  const date = document.getElementById("workoutDate").value || todayISO();
+  const d = dayData(date);
+  workouts[selectedWorkout].forEach(ex => delete d.checks[`${selectedWorkout}:${ex[0]}`]);
+  persist();
+  renderWorkout();
+}
+
+function saveToday() {
+  const date = document.getElementById("workoutDate").value || todayISO();
+  dayData(date).workout = selectedWorkout;
+  persist();
+  alert("Workout saved for " + date + ".");
+  renderDashboard();
+}
+
+function showExercise(name) {
   const info = exerciseHelp[name];
-  $("exercisePopupTitle").textContent = name;
-  $("exercisePopupDescription").textContent =
-    (info ? info[0] : tip) + " Sets/reps: " + reps + ".";
+  const exercise = workouts[selectedWorkout].find(ex => ex[0] === name);
 
-  const img = $("exercisePopupImage");
-  img.hidden = true;
-  img.onerror = () => { img.hidden = true; };
-  img.onload = () => { img.hidden = false; };
+  document.getElementById("modalTitle").textContent = name;
+  document.getElementById("modalMeta").textContent =
+    exercise ? `${selectedWorkout} day · ${exercise[1]}` : "Exercise guide";
+  document.getElementById("modalDescription").textContent =
+    info ? info.desc : "Use controlled movement and a comfortable range of motion.";
 
-  if (info && info[2]) img.src = info[2];
-  else img.removeAttribute("src");
-
-  const steps = info ? info[1] : [
-    tip,
-    "Use a controlled movement and comfortable range.",
-    "Stop if you feel sharp pain; ask a qualified trainer to check your form."
+  const steps = info ? info.steps : [
+    "Set up in a stable position.",
+    "Perform the movement slowly and with control.",
+    "Breathe normally and stop if you feel sharp pain."
   ];
+  document.getElementById("modalSteps").innerHTML =
+    steps.map(step => `<li>${escapeHTML(step)}</li>`).join("");
+  document.getElementById("modalTip").textContent =
+    info ? info.tip : "Ask a qualified trainer to check your technique if you are unsure.";
 
-  $("exercisePopupSteps").replaceChildren(
-    ...steps.map(step => {
-      const li = document.createElement("li");
-      li.textContent = step;
-      return li;
-    })
+  const image = document.getElementById("modalImage");
+  const imageNote = document.getElementById("modalImageNote");
+  image.onerror = () => {
+    image.classList.add("hidden");
+    imageNote.textContent = "Image unavailable right now. Written instructions are still available.";
+  };
+
+  if (info && info.image) {
+    image.src = info.image;
+    image.alt = name + " demonstration";
+    image.classList.remove("hidden");
+    imageNote.textContent = "Image requires an internet connection.";
+  } else {
+    image.removeAttribute("src");
+    image.classList.add("hidden");
+    imageNote.textContent = "No demonstration image is configured for this exercise yet.";
+  }
+  document.getElementById("exerciseModal").classList.remove("hidden");
+}
+
+function closeExercise() {
+  document.getElementById("exerciseModal").classList.add("hidden");
+}
+
+function renderDiet() {
+  document.querySelectorAll("[data-diet]").forEach(btn =>
+    btn.classList.toggle("active", btn.dataset.diet === selectedDiet)
   );
+  document.getElementById("dietPreferenceLabel").textContent =
+    selectedDiet === "veg" ? "Showing vegetarian meals." : "Showing non-vegetarian meals.";
 
-  $("exercisePopup").classList.add("open");
+  const d = dayData();
+  document.getElementById("dietContent").innerHTML = meals().map(meal => `
+    <div class="meal">
+      <h3>${escapeHTML(meal.title)}</h3>
+      <div class="checkrow">
+        <input id="meal-${meal.id}" type="checkbox" ${d.meals[meal.id] ? "checked" : ""}
+          onchange="toggleMeal('${meal.id}',this.checked)">
+        <label for="meal-${meal.id}">
+          ${escapeHTML(meal.name)}
+          <small>Estimated ${meal.protein} g protein · ${meal.calories} kcal</small>
+        </label>
+      </div>
+    </div>`).join("");
+
+  updateDietStats();
 }
 
-$("closeExercisePopup").onclick = () =>
-  $("exercisePopup").classList.remove("open");
-
-$("exercisePopup").onclick = e => {
-  if (e.target.id === "exercisePopup")
-    $("exercisePopup").classList.remove("open");
-};
-
-function renderWorkout(k) {
-  const w = plan[k];
-  $("workoutTitle").textContent = w.title + " — " + w.focus;
-
-  $("exerciseList").replaceChildren(
-    ...w.items.map((x, i) => {
-      const row = document.createElement("div");
-      row.className = "exercise";
-
-      const title = document.createElement("b");
-      const link = document.createElement("button");
-      link.type = "button";
-      link.className = "exercise-name";
-      link.textContent = (i + 1) + ". " + x[0];
-      link.onclick = () => showExercise(x[0], x[1], x[2]);
-
-      const reps = document.createElement("span");
-      reps.className = "muted";
-      reps.textContent = " " + x[1];
-
-      title.append(link, reps);
-
-      const tip = document.createElement("small");
-      tip.textContent = x[2];
-
-      row.append(title, tip);
-      return row;
-    })
-  );
+function toggleMeal(id, checked) {
+  dayData().meals[id] = checked;
+  persist();
+  updateDietStats();
+  renderDashboard();
 }
 
-function renderToday(){
-let k=['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()],w=plan[k],d=dayData();
-$('todayHeading').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
-$('dayTitle').textContent=w.title;$('dayFocus').textContent=w.focus;
-$('dailyTasks').innerHTML=w.items.map((x,i)=>'<label class="item"><input type="checkbox" data-check="ex'+i+'" '+(d.checks['ex'+i]?'checked':'')+'><span>'+x[0]+'<small>'+x[1]+' · '+x[2]+'</small></span></label>').join('');
-$('habits').innerHTML=habits.map((x,i)=>'<label class="item"><input type="checkbox" data-check="habit'+i+'" '+(d.checks['habit'+i]?'checked':'')+'><span>'+x[0]+'<small>'+x[1]+'</small></span></label>').join('');
-document.querySelectorAll('[data-check]').forEach(c=>c.onchange=()=>{d.checks[c.dataset.check]=c.checked;save();renderToday()});
-let total=w.items.length+habits.length,done=Object.values(d.checks).filter(Boolean).length;
-$('dayBar').style.width=Math.min(100,done/total*100)+'%';$('dayCount').textContent=done+' of '+total+' tasks completed';$('percent').textContent=Math.round(done/total*100)+'%';
+function uncheckMeals() {
+  dayData().meals = {};
+  persist();
+  renderDiet();
+  renderDashboard();
 }
-function renderFood(){
-let d=dayData();
-$('meals').innerHTML=meals.map((m,i)=>'<label class="item"><input type="checkbox" data-food="'+i+'" '+(d.checks['food'+i]?'checked':'')+'><span><b>'+m[0]+'</b><small>'+m[1]+'</small><small>'+m[2]+'</small></span></label>').join('');
-document.querySelectorAll('[data-food]').forEach(c=>c.onchange=()=>{d.checks['food'+c.dataset.food]=c.checked;save();renderFood()});
-let done=meals.filter((m,i)=>d.checks['food'+i]).length;
-$('foodBar').style.width=done/meals.length*100+'%';$('foodCount').textContent=done+' of '+meals.length+' meals checked';
+
+function updateDietStats() {
+  const d = dayData();
+  const done = meals().filter(m => d.meals[m.id]);
+  const protein = done.reduce((sum,m) => sum + m.protein, 0);
+  document.getElementById("dietProtein").textContent = protein + " g";
+  document.getElementById("proteinTargetLabel").textContent =
+    Number(state.settings.proteinTarget) + " g";
+  document.getElementById("mealsDone").textContent = `${done.length}/${meals().length}`;
 }
-function renderWater(){
-let d=dayData(),goal=+$('waterGoal').value||3000,size=+$('glassSize').value||200;
-$('waterGoalText').textContent=goal;$('waterTotal').textContent=d.water;
-$('waterBar').style.width=Math.min(100,d.water/goal*100)+'%';
-$('waterButtons').innerHTML='';
-for(let i=0;i<Math.ceil(goal/size);i++){
-let ml=Math.min(size,goal-i*size),b=document.createElement('button');
-b.textContent=(d.glasses.includes(i)?'✓ ':'+')+ml+' ml';
-b.style.background=d.glasses.includes(i)?'#d1fae5':'white';
-b.onclick=()=>{if(d.glasses.includes(i)){d.glasses=d.glasses.filter(n=>n!==i);d.water=Math.max(0,d.water-ml)}else{d.glasses.push(i);d.water+=ml}save();renderWater()};
-$('waterButtons').appendChild(b);
-}}
-$('waterGoal').onchange=renderWater;$('glassSize').onchange=renderWater;
-$('undoWater').onclick=()=>{let d=dayData(),i=d.glasses.pop();if(i!==undefined)d.water=Math.max(0,d.water-Math.min(+$('glassSize').value,Math.max(0,(+$('waterGoal').value||3000)-i*(+$('glassSize').value))));save();renderWater()};
-let alertTimer=null,lastAlert=0;
-$('enableAlerts').onclick=()=>{
-if(alertTimer)clearInterval(alertTimer);
-let mins=+$('interval').value*60000;
-$('alertStatus').textContent='Reminders active while this page remains open.';
-function alertNow(){
-let now=new Date(),hm=now.getHours()*60+now.getMinutes(),s=+$('startTime').value.slice(0,2)*60+ +$('startTime').value.slice(3),e=+$('endTime').value.slice(0,2)*60+ +$('endTime').value.slice(3);
-if(hm<s||hm>e||Date.now()-lastAlert<mins)return;
-lastAlert=Date.now();
-let t=$('reminderType').value,msg=t==='water'?'Time for a water break. Log your glass in your tracker.':t==='move'?'Stand up and move or stretch gently.':'Take a water break and move around gently.';
-$('alertStatus').textContent='Last reminder: '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
-if('Notification'in window&&Notification.permission==='granted'){new Notification('Rushikesh Fit Plan',{body:msg})}else{alert(msg)}
+
+function renderDashboard() {
+  const date = todayISO();
+  const d = dayData(date);
+  const w = waterData(date);
+  const day = d.workout || "Push";
+  const exerciseItems = workouts[day] || workouts.Push;
+  const workoutDone = exerciseItems.filter(ex => d.checks[`${day}:${ex[0]}`]).length;
+  const mealDone = meals().filter(m => d.meals[m.id]).length;
+  const protein = meals().filter(m => d.meals[m.id]).reduce((sum,m) => sum + m.protein, 0);
+  const total = exerciseItems.length + meals().length;
+  const complete = workoutDone + mealDone;
+  const percent = Math.round((complete / total) * 100);
+
+  document.getElementById("todayLabel").textContent =
+    new Date(date + "T12:00:00").toLocaleDateString(undefined,
+      { weekday:"long", month:"short", day:"numeric", year:"numeric" });
+  document.getElementById("dashWorkout").textContent = day;
+  document.getElementById("dashWater").textContent = w.total.toLocaleString() + " ml";
+  document.getElementById("dashGlasses").textContent = w.total.toLocaleString() + " ml";
+  document.getElementById("dashWaterTarget").textContent =
+    Number(state.settings.waterTarget).toLocaleString();
+  document.getElementById("dashProtein").textContent = protein + " g";
+  document.getElementById("dayProgress").style.width = percent + "%";
+  document.getElementById("progressText").textContent =
+    `${percent}% complete · ${complete} of ${total} checklist items`;
+
+  document.getElementById("dashboardMeals").innerHTML = meals().map(m => `
+    <div class="checkrow" style="margin-bottom:7px">
+      <input id="dashmeal-${m.id}" type="checkbox" ${d.meals[m.id] ? "checked" : ""}
+        onchange="toggleMeal('${m.id}',this.checked)">
+      <label for="dashmeal-${m.id}">
+        ${escapeHTML(m.title)}
+        <small>${m.protein} g estimated protein</small>
+      </label>
+    </div>`).join("");
 }
-if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
-alertNow();alertTimer=setInterval(alertNow,60000);
-};
-$('stopAlerts').onclick=()=>{if(alertTimer)clearInterval(alertTimer);alertTimer=null;$('alertStatus').textContent='Reminders stopped.'};
-function renderHistory(){
-let logs=store.logs||[];
-$('history').innerHTML=logs.length?'<table><tr><th>Date</th><th>Weight</th><th>Waist</th></tr>'+logs.slice().reverse().map(x=>'<tr><td>'+x.date+'</td><td>'+(x.weight||'—')+'</td><td>'+(x.waist||'—')+'</td></tr>').join('')+'</table>':'<p class="muted">No entries yet.</p>';
+
+function addWater(amount) {
+  const n = Number(amount);
+  if (!Number.isFinite(n) || n <= 0 || n > 5000) return;
+  const w = waterData();
+  w.total += n;
+  w.entries.push({ amount:n, time:new Date().toISOString() });
+  persist();
+  renderWater();
+  renderDashboard();
 }
-$('logDate').value=keyDate();$('weight').value='76';
-$('saveProgress').onclick=()=>{
-let weight=$('weight').value,waist=$('waist').value,date=$('logDate').value||keyDate();
-if(!weight&&!waist){alert('Enter your weight or waist.');return}
-if(!store.logs)store.logs=[];
-store.logs=store.logs.filter(x=>x.date!==date);store.logs.push({date,weight,waist});store.logs.sort((a,b)=>a.date.localeCompare(b.date));save();renderHistory();alert('Progress saved on this device.');
-};
-$('export').onclick=()=>{
-let a=document.createElement('a'),blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
-a.href=URL.createObjectURL(blob);a.download='rushikesh-fit-backup.json';a.click();URL.revokeObjectURL(a.href);
-};
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
-document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));
-document.querySelectorAll('section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+
+function addCustomWater() {
+  const amount = Number(document.getElementById("customWater").value);
+  if (!Number.isFinite(amount) || amount < 1 || amount > 3000) {
+    alert("Enter a water amount between 1 and 3000 ml.");
+    return;
+  }
+  addWater(amount);
+}
+
+function undoWater() {
+  const w = waterData();
+  const entry = w.entries.pop();
+  if (!entry) {
+    alert("No water entry to undo today.");
+    return;
+  }
+  w.total = Math.max(0, w.total - Number(entry.amount || 0));
+  persist();
+  renderWater();
+  renderDashboard();
+}
+
+function resetWater() {
+  if (!confirm("Reset today's water total?")) return;
+  state.waterLog[todayISO()] = { total:0, entries:[] };
+  persist();
+  renderWater();
+  renderDashboard();
+}
+
+function renderWater() {
+  const w = waterData();
+  const target = Math.max(250, Number(state.settings.waterTarget) || 2500);
+  const percent = Math.min(100, Math.round((w.total / target) * 100));
+  document.getElementById("waterDateLabel").textContent = "Date: " + todayISO();
+  document.getElementById("waterTotal").textContent = w.total.toLocaleString();
+  document.getElementById("waterProgress").style.width = percent + "%";
+  document.getElementById("waterProgressText").textContent =
+    `${percent}% of ${target.toLocaleString()} ml target`;
+}
+
+function saveSettings() {
+  const waterTarget = Number(document.getElementById("waterTarget").value);
+  const reminderMinutes = Number(document.getElementById("reminderMinutes").value);
+  const proteinTarget = Number(document.getElementById("proteinTarget").value);
+  const calorieTarget = Number(document.getElementById("calorieTarget").value);
+
+  if (waterTarget < 250 || waterTarget > 10000 ||
+      reminderMinutes < 15 || reminderMinutes > 240 ||
+      proteinTarget < 40 || proteinTarget > 300 ||
+      calorieTarget < 800 || calorieTarget > 6000) {
+    alert("Check settings: water 250–10000 ml; reminder 15–240 minutes; protein 40–300 g; calories 800–6000 kcal.");
+    return;
+  }
+
+  state.settings = {
+    ...state.settings,
+    waterTarget,
+    reminderMinutes,
+    proteinTarget,
+    calorieTarget,
+    dietPreference:selectedDiet
+  };
+  persist();
+  renderDashboard();
+  renderWater();
+  updateDietStats();
+  document.getElementById("reminderStatus").textContent = "Settings saved.";
+}
+
+function startReminders() {
+  stopReminders();
+  const minutes = Number(state.settings.reminderMinutes) || 60;
+
+  if ("Notification" in window && Notification.permission === "default") {
+    Notification.requestPermission().then(permission => {
+      if (permission === "granted") runReminderTimer(minutes);
+      else document.getElementById("reminderStatus").textContent =
+        "Notifications were not allowed. Keep this page open for reminders.";
+    });
+  } else {
+    runReminderTimer(minutes);
+  }
+  document.getElementById("reminderStatus").textContent =
+    `Reminder started every ${minutes} minutes while the page is active.`;
+}
+
+function runReminderTimer(minutes) {
+  reminderTimer = setInterval(() => {
+    const message = "Time to drink water if you need it. Log your intake in the fitness tracker.";
+    document.getElementById("reminderStatus").textContent = message;
+    if ("Notification" in window && Notification.permission === "granted") {
+      try { new Notification("Water reminder",{ body:message }); } catch (error) {}
+    } else {
+      alert(message);
+    }
+  }, minutes * 60 * 1000);
+}
+
+function stopReminders() {
+  if (reminderTimer) clearInterval(reminderTimer);
+  reminderTimer = null;
+  const status = document.getElementById("reminderStatus");
+  if (status) status.textContent = "Water reminders stopped.";
+}
+
+function saveProgress() {
+  const date = document.getElementById("logDate").value || todayISO();
+  const weightRaw = document.getElementById("weight").value;
+  const waistRaw = document.getElementById("waist").value;
+  const hipsRaw = document.getElementById("hips").value;
+  const notes = document.getElementById("notes").value.trim();
+
+  if (!weightRaw && !waistRaw && !hipsRaw && !notes) {
+    alert("Enter at least one measurement or note.");
+    return;
+  }
+
+  const record = {
+    date,
+    weight:weightRaw === "" ? null : Number(weightRaw),
+    waist:waistRaw === "" ? null : Number(waistRaw),
+    hips:hipsRaw === "" ? null : Number(hipsRaw),
+    notes
+  };
+  const index = state.progress.findIndex(item => item.date === date);
+  if (index >= 0) state.progress[index] = record;
+  else state.progress.push(record);
+  state.progress.sort((a,b) => b.date.localeCompare(a.date));
+  persist();
+  renderHistory();
+  document.getElementById("backupStatus").textContent = "Progress saved.";
+}
+
+function renderHistory() {
+  const list = document.getElementById("historyList");
+  if (!state.progress.length) {
+    list.innerHTML = '<p class="muted">No progress entries yet. Add your first measurement above.</p>';
+    return;
+  }
+
+  list.innerHTML = state.progress.map((item,index) => {
+    const details = [
+      item.weight != null ? `Weight: ${escapeHTML(item.weight)} kg` : "",
+      item.waist != null ? `Waist: ${escapeHTML(item.waist)} cm` : "",
+      item.hips != null ? `Hips: ${escapeHTML(item.hips)} cm` : "",
+      item.notes ? `Notes: ${escapeHTML(item.notes)}` : ""
+    ].filter(Boolean).join(" · ");
+
+    return `<div class="history-item">
+      <strong>${escapeHTML(item.date)}</strong>
+      <p class="sub">${details || "No details recorded."}</p>
+      <button class="small danger" onclick="deleteProgress(${index})">Delete entry</button>
+    </div>`;
+  }).join("");
+}
+
+function deleteProgress(index) {
+  if (!confirm("Delete this progress entry?")) return;
+  state.progress.splice(index,1);
+  persist();
+  renderHistory();
+}
+
+function downloadFile(filename,content,type) {
+  const blob = new Blob([content],{type});
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url),1000);
+}
+
+function exportData() {
+  downloadFile(`fitness-backup-${todayISO()}.json`,JSON.stringify(state,null,2),"application/json");
+  document.getElementById("backupStatus").textContent =
+    "Backup export requested. Check your browser's download/share options.";
+}
+
+function exportProgressCSV() {
+  const rows = [["Date","Weight kg","Waist cm","Hips cm","Notes"]];
+  state.progress.forEach(r => rows.push([r.date,r.weight ?? "",r.waist ?? "",r.hips ?? "",r.notes ?? ""]));
+  const csv = rows.map(row => row.map(value =>
+    `"${String(value).replace(/"/g,'""')}"`
+  ).join(",")).join("\r\n");
+  downloadFile(`fitness-progress-${todayISO()}.csv`,csv,"text/csv;charset=utf-8");
+  document.getElementById("backupStatus").textContent =
+    "CSV export requested. Check your browser's download options.";
+}
+
+function clearAllData() {
+  if (!confirm("This will permanently delete all fitness data saved in this browser. Export a backup first. Continue?")) return;
+  stopReminders();
+  state = defaultState();
+  selectedDiet = "veg";
+  persist();
+  initializeInputs();
+  renderAll();
+  document.getElementById("backupStatus").textContent = "All app data cleared.";
+}
+
+function initializeInputs() {
+  document.getElementById("workoutDate").value = todayISO();
+  document.getElementById("logDate").value = todayISO();
+  document.getElementById("waterTarget").value = state.settings.waterTarget;
+  document.getElementById("reminderMinutes").value = state.settings.reminderMinutes;
+  document.getElementById("proteinTarget").value = state.settings.proteinTarget;
+  document.getElementById("calorieTarget").value = state.settings.calorieTarget;
+}
+
+function renderAll() {
+  renderDashboard();
+  renderWorkout();
+  renderDiet();
+  renderWater();
+  renderHistory();
+}
+
+document.querySelectorAll("[data-view]").forEach(btn =>
+  btn.addEventListener("click",() => showView(btn.dataset.view))
+);
+
+document.querySelectorAll("[data-diet]").forEach(btn =>
+  btn.addEventListener("click",() => {
+    selectedDiet = btn.dataset.diet;
+    state.settings.dietPreference = selectedDiet;
+    persist();
+    renderDiet();
+    renderDashboard();
+  })
+);
+
+document.querySelectorAll("[data-day]").forEach(btn =>
+  btn.addEventListener("click",() => {
+    selectedWorkout = btn.dataset.day;
+    const date = document.getElementById("workoutDate").value || todayISO();
+    dayData(date).workout = selectedWorkout;
+    persist();
+    renderWorkout();
+  })
+);
+
+document.getElementById("workoutDate").addEventListener("change",renderWorkout);
+document.addEventListener("keydown",event => {
+  if (event.key === "Escape") closeExercise();
 });
-$('workoutDay').onchange=()=>renderWorkout($('workoutDay').value);
-renderWorkout('mon');renderToday();renderFood();renderWater();renderHistory();
+
+initializeInputs();
+renderAll();
 </script>
 </body>
 </html>
