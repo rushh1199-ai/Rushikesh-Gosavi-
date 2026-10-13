@@ -1,0 +1,259 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#102a43">
+<title>Rushikesh Fit Plan</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f1f5f9;color:#172b4d}
+header{background:#102a43;color:white;padding:22px 16px;border-radius:0 0 22px 22px}
+h1{margin:0 0 7px;font-size:25px}h2{font-size:20px}h3{font-size:16px}
+header p{margin:5px 0;color:#dbeafe;font-size:13px}
+main{max-width:720px;margin:auto;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat,.card{background:white;padding:14px;border-radius:14px;margin-bottom:12px;border:1px solid #e2e8f0}
+.stat b{display:block;font-size:18px;color:#0f766e}.stat small{font-size:11px;color:#64748b}
+nav{display:flex;gap:6px;overflow:auto;padding:12px 0;position:sticky;top:0;background:#f1f5f9;z-index:2}
+button,select,input{font:inherit}
+nav button{padding:10px 13px;border:0;border-radius:20px;background:white;white-space:nowrap}
+nav button.active{background:#102a43;color:white}
+button.action{border:0;border-radius:9px;padding:11px 14px;background:#0f766e;color:white;font-weight:bold}
+button.light{background:#e2e8f0;color:#102a43}
+label.item{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #edf2f7;align-items:flex-start}
+.item input{width:19px;height:19px;accent-color:#0f766e;flex-shrink:0}
+.item span{flex:1}.item small{display:block;color:#64748b;margin-top:4px;line-height:1.4}
+.muted{color:#64748b;font-size:13px;line-height:1.5}
+.progress{height:8px;background:#e2e8f0;border-radius:10px;overflow:hidden;margin:10px 0}
+.progress div{height:100%;width:0;background:#0f766e}
+.field{display:block;margin:10px 0;font-size:13px;color:#64748b}
+.field input,.field select{display:block;width:100%;padding:10px;border:1px solid #cbd5e1;border-radius:8px;margin-top:5px;background:white;color:#172b4d}
+section{display:none}section.active{display:block}
+table{width:100%;border-collapse:collapse;font-size:13px}
+td,th{text-align:left;padding:9px 4px;border-bottom:1px solid #e2e8f0}
+th{color:#64748b}
+.water{font-size:26px;font-weight:bold;color:#0f766e}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.chips button{border:1px solid #b6d7d2;border-radius:9px;background:white;padding:10px}
+.note{background:#fff7df;padding:12px;border-radius:10px;font-size:12px;line-height:1.5}
+.exercise{padding:10px 0;border-bottom:1px solid #e2e8f0}
+.exercise b{display:block}.exercise small{color:#64748b}
+</style>
+</head>
+<body>
+<header>
+<h1>Rushikesh Fit Plan 💪</h1>
+<p>Fat loss • Muscle retention • Strong abs</p>
+<p>Current weight: 76 kg | Initial goal: 65–68 kg</p>
+</header>
+<main>
+<div class="stats">
+<div class="stat"><b>2,000</b><small>Daily kcal target</small></div>
+<div class="stat"><b>130–150 g</b><small>Protein target</small></div>
+<div class="stat"><b id="percent">0%</b><small>Checklist complete</small></div>
+</div>
+
+<nav>
+<button class="active" data-tab="today">Today</button>
+<button data-tab="workouts">Workouts</button>
+<button data-tab="food">Diet plan</button>
+<button data-tab="water">Water & alerts</button>
+<button data-tab="progress">Progress</button>
+</nav>
+
+<section id="today" class="active">
+<h2 id="todayHeading">Today's plan</h2>
+<div class="card">
+<h3 id="dayTitle"></h3><p class="muted" id="dayFocus"></p>
+<div id="dailyTasks"></div>
+<div class="progress"><div id="dayBar"></div></div>
+<p class="muted" id="dayCount"></p>
+</div>
+<div class="card"><h3>Daily habits</h3><div id="habits"></div></div>
+<div class="note">Fat cannot be removed from only the buttocks or love handles. Overall fat loss, strength training, nutrition and sleep are the priorities.</div>
+</section>
+
+<section id="workouts">
+<h2>Workout planner</h2>
+<label class="field">Choose a day
+<select id="workoutDay">
+<option value="mon">Monday — Push A</option>
+<option value="tue">Tuesday — Pull A</option>
+<option value="wed">Wednesday — Legs + Core A</option>
+<option value="thu">Thursday — Push B</option>
+<option value="fri">Friday — Pull B</option>
+<option value="sat">Saturday — Legs + Core B</option>
+<option value="sun">Sunday — Recovery</option>
+</select></label>
+<div class="card"><h3 id="workoutTitle"></h3><p class="muted">Warm up for 5–10 minutes. Use manageable weights and maintain proper form.</p><div id="exerciseList"></div></div>
+<div class="note">Stop if you experience sharp pain. Ask a qualified gym trainer to check your technique on squats, presses and deadlifts.</div>
+</section>
+
+<section id="food">
+<h2>Daily diet checklist</h2>
+<p class="muted">Quantities are in grams. Meat is weighed cooked; oats and atta are weighed dry. Calories are estimates.</p>
+<div class="card"><div id="meals"></div>
+<div class="progress"><div id="foodBar"></div></div>
+<p class="muted" id="foodCount"></p></div>
+<div class="card"><h3>Portion reference</h3>
+<table>
+<tr><th>Food</th><th>Amount</th><th>Weight type</th></tr>
+<tr><td>Whole eggs</td><td>5 daily</td><td>Count large eggs</td></tr>
+<tr><td>Egg whites</td><td>3</td><td>Count</td></tr>
+<tr><td>Oats</td><td>40 g</td><td>Dry</td></tr>
+<tr><td>Roasted chana</td><td>30 g</td><td>Ready to eat</td></tr>
+<tr><td>Banana</td><td>100–120 g each</td><td>Edible portion</td></tr>
+<tr><td>Chicken</td><td>150 g lunch + 100 g dinner</td><td>Cooked</td></tr>
+<tr><td>Atta</td><td>60 g lunch + 30 g dinner</td><td>Dry flour</td></tr>
+<tr><td>Dal</td><td>100 g</td><td>Cooked</td></tr>
+<tr><td>Vegetables and salad</td><td>350 g</td><td>Ready to eat</td></tr>
+<tr><td>Low-fat milk</td><td>200 ml optional</td><td>Measure liquid</td></tr>
+</table>
+<p class="muted">Actual calories vary by food brand, cooking oil, chicken cut and portion size. Track everything you eat to stay near 2,000 kcal and 130–150 g protein. The sample menu may need adjustment to meet both targets.</p>
+</div>
+</section>
+
+<section id="water">
+<h2>Water tracker 💧</h2>
+<div class="card">
+<div class="water"><span id="waterTotal">0</span> / <span id="waterGoalText">3000</span> ml</div>
+<div class="progress"><div id="waterBar"></div></div>
+<label class="field">Daily water goal (ml)<input id="waterGoal" type="number" value="3000" min="1000" max="5000" step="250"></label>
+<label class="field">Glass size<select id="glassSize"><option value="150">150 ml</option><option value="200" selected>200 ml</option><option value="250">250 ml</option><option value="300">300 ml</option><option value="500">500 ml</option></select></label>
+<div class="chips" id="waterButtons"></div>
+<button class="action light" id="undoWater">Undo last glass</button>
+</div>
+<div class="card">
+<h3>Set water reminders</h3>
+<p class="muted">Alerts work while this page stays open. iPhone may stop them if Safari is closed or suspended.</p>
+<label class="field">Start time<input type="time" id="startTime" value="08:00"></label>
+<label class="field">End time<input type="time" id="endTime" value="21:00"></label>
+<label class="field">Repeat every<select id="interval"><option value="60">1 hour</option><option value="90">90 minutes</option><option value="120" selected>2 hours</option><option value="150">2.5 hours</option></select></label>
+<label class="field">Reminder type<select id="reminderType"><option value="water">Drink water</option><option value="move">Stand and move</option><option value="both">Water and movement</option></select></label>
+<button class="action" id="enableAlerts">Enable reminders</button>
+<button class="action light" id="stopAlerts">Stop</button>
+<p class="muted" id="alertStatus">Reminders are off.</p>
+<div class="note">Drink steadily according to thirst, heat and exercise. Do not force excessive water. Follow medical advice if you have a fluid restriction.</div>
+</div>
+</section>
+
+<section id="progress">
+<h2>Progress tracker</h2>
+<div class="card">
+<label class="field">Date<input type="date" id="logDate"></label>
+<label class="field">Weight (kg)<input type="number" id="weight" min="30" max="250" step="0.1" placeholder="76.0"></label>
+<label class="field">Waist measurement (cm)<input type="number" id="waist" min="30" max="200" step="0.1" placeholder="Enter waist"></label>
+<button class="action" id="saveProgress">Save entry</button>
+</div>
+<div class="card"><h3>History</h3><div id="history"></div>
+<button class="action light" id="export">Export backup</button>
+</div>
+</section>
+<p class="muted">Your checklist and progress are saved in this browser on this device. Export a backup regularly.</p>
+</main>
+
+<script>
+const $=id=>document.getElementById(id);
+const keyDate=()=>{let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
+let store={};
+try{store=JSON.parse(localStorage.getItem('rushFit')||'{}')}catch(e){}
+if(!store.days)store.days={};
+function save(){localStorage.setItem('rushFit',JSON.stringify(store))}
+function dayData(){let k=keyDate();if(!store.days[k])store.days[k]={checks:{},water:0,glasses:[]};return store.days[k]}
+const plan={
+mon:{title:'Push A',focus:'Chest, shoulders, triceps',items:[['Bench press','3 × 8–10','Feet planted; lower under control.'],['Incline dumbbell press','3 × 10–12','Keep wrists straight.'],['Shoulder press','2 × 10','Avoid excessive back arch.'],['Lateral raise','3 × 12–15','Do not swing.'],['Chest fly machine','2 × 12–15','Use a comfortable range.'],['Triceps pushdown','3 × 10–12','Elbows by your sides.'],['Brisk walk','10–15 min','Comfortable pace.']]},
+tue:{title:'Pull A',focus:'Back, rear shoulders and biceps',items:[['Lat pulldown','3 × 10–12','Pull to upper chest, not behind neck.'],['Seated cable row','3 × 10–12','Avoid rocking your torso.'],['One-arm dumbbell row','2 × 10/side','Keep your back neutral.'],['Face pull','2 × 12–15','Pull rope toward face.'],['Dumbbell curl','3 × 10–12','Keep upper arms still.'],['Hammer curl','2 × 10–12','Keep wrists neutral.'],['Incline walk','10–20 min','Optional.']]},
+wed:{title:'Legs + Core A',focus:'Legs and abdominal strength',items:[['Goblet squat','3 × 8–10','Knees aligned with toes.'],['Leg press','3 × 10–12','Do not round lower back.'],['Romanian deadlift','3 × 8–10','Hinge at hips; weights near legs.'],['Walking lunges','2 × 10 steps/leg','Move under control.'],['Leg curl','2 × 12–15','Control the return.'],['Calf raise','3 × 12–15','Pause at the top.'],['Forearm plank','3 × 30–45 sec','Keep body straight.'],['Reverse crunch','3 × 10–15','Curl pelvis; do not swing.']]},
+thu:{title:'Push B',focus:'Chest, shoulders and triceps',items:[['Machine chest press','3 × 8–12','Use controlled movement.'],['Incline dumbbell press','3 × 10–12','Do not bounce.'],['Dumbbell shoulder press','2 × 10','Use a manageable load.'],['Cable lateral raise','3 × 12–15','Avoid shrugging.'],['Pec deck','2 × 12–15','Control both directions.'],['Rope triceps pushdown','3 × 10–12','Keep elbows still.'],['Brisk walk','10–15 min','Optional.']]},
+fri:{title:'Pull B',focus:'Back and biceps',items:[['Neutral-grip pulldown','3 × 10–12','Pull elbows down.'],['Chest-supported row','3 × 10–12','Keep chest supported.'],['Seated cable row','2 × 12','Avoid jerking.'],['Reverse fly','2 × 12–15','Control rear shoulders.'],['Cable curl','3 × 10–12','Keep elbows still.'],['Hammer curl','2 × 10–12','Lower slowly.'],['Incline walk','10–20 min','Optional.']]},
+sat:{title:'Legs + Core B',focus:'Legs, core stability and cardio',items:[['Goblet squat or leg press','3 × 10','Use comfortable depth.'],['Light Romanian deadlift','2 × 10','Keep back neutral.'],['Leg extension','2 × 12–15','No kicking.'],['Seated leg curl','2 × 12–15','Control return.'],['Calf raise','3 × 12–15','Full controlled range.'],['Dead bug','2 × 8–12/side','Keep lower back down.'],['Forearm plank','3 × 30–45 sec','Brace abs.'],['Walk or cycle','20–30 min','Moderate pace.']]},
+sun:{title:'Recovery day',focus:'Rest and gentle movement',items:[['Easy walk','20–40 min','Comfortable pace.'],['Gentle mobility','5–10 min','Do not force stretches.'],['Meal prep','10 min','Plan meals for the week.']]}
+};
+const habits=[['Water goal','Log glasses in the Water tab.'],['Protein','Aim for 130–150 g today.'],['Steps','Build toward 8,000–10,000 if comfortable.'],['Sleep','Aim for 7–9 hours.'],['Food tracking','Include oils, drinks and snacks.']];
+const meals=[
+['Breakfast','3 whole eggs + 40 g dry oats + 100–120 g banana','~460–490 kcal; 26–29 g protein'],
+['Snack','30 g roasted chana + 150 g apple','~190–210 kcal; 6–7 g protein'],
+['Lunch','150 g cooked chicken + 60 g dry atta + 100 g cooked dal + 150 g salad + up to 5 g oil','~600–650 kcal; 55–60 g protein'],
+['Pre-workout','100–120 g banana; coffee optional','~90–110 kcal'],
+['Post-workout','2 whole eggs + 3 egg whites','~190–210 kcal; 23–25 g protein'],
+['Dinner','100 g cooked chicken/fish + 200 g vegetables + 30 g dry atta + up to 5 g oil','~350–430 kcal; 30–35 g protein'],
+['Optional','200 ml low-fat milk; count in calories','~90–110 kcal; 6–7 g protein']
+];
+function renderWorkout(k){
+let w=plan[k];$('workoutTitle').textContent=w.title+' — '+w.focus;
+$('exerciseList').innerHTML=w.items.map((x,i)=>'<div class="exercise"><b>'+ (i+1)+'. '+x[0]+' <span class="muted">'+x[1]+'</span></b><small>'+x[2]+'</small></div>').join('');
+}
+function renderToday(){
+let k=['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()],w=plan[k],d=dayData();
+$('todayHeading').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
+$('dayTitle').textContent=w.title;$('dayFocus').textContent=w.focus;
+$('dailyTasks').innerHTML=w.items.map((x,i)=>'<label class="item"><input type="checkbox" data-check="ex'+i+'" '+(d.checks['ex'+i]?'checked':'')+'><span>'+x[0]+'<small>'+x[1]+' · '+x[2]+'</small></span></label>').join('');
+$('habits').innerHTML=habits.map((x,i)=>'<label class="item"><input type="checkbox" data-check="habit'+i+'" '+(d.checks['habit'+i]?'checked':'')+'><span>'+x[0]+'<small>'+x[1]+'</small></span></label>').join('');
+document.querySelectorAll('[data-check]').forEach(c=>c.onchange=()=>{d.checks[c.dataset.check]=c.checked;save();renderToday()});
+let total=w.items.length+habits.length,done=Object.values(d.checks).filter(Boolean).length;
+$('dayBar').style.width=Math.min(100,done/total*100)+'%';$('dayCount').textContent=done+' of '+total+' tasks completed';$('percent').textContent=Math.round(done/total*100)+'%';
+}
+function renderFood(){
+let d=dayData();
+$('meals').innerHTML=meals.map((m,i)=>'<label class="item"><input type="checkbox" data-food="'+i+'" '+(d.checks['food'+i]?'checked':'')+'><span><b>'+m[0]+'</b><small>'+m[1]+'</small><small>'+m[2]+'</small></span></label>').join('');
+document.querySelectorAll('[data-food]').forEach(c=>c.onchange=()=>{d.checks['food'+c.dataset.food]=c.checked;save();renderFood()});
+let done=meals.filter((m,i)=>d.checks['food'+i]).length;
+$('foodBar').style.width=done/meals.length*100+'%';$('foodCount').textContent=done+' of '+meals.length+' meals checked';
+}
+function renderWater(){
+let d=dayData(),goal=+$('waterGoal').value||3000,size=+$('glassSize').value||200;
+$('waterGoalText').textContent=goal;$('waterTotal').textContent=d.water;
+$('waterBar').style.width=Math.min(100,d.water/goal*100)+'%';
+$('waterButtons').innerHTML='';
+for(let i=0;i<Math.ceil(goal/size);i++){
+let ml=Math.min(size,goal-i*size),b=document.createElement('button');
+b.textContent=(d.glasses.includes(i)?'✓ ':'+')+ml+' ml';
+b.style.background=d.glasses.includes(i)?'#d1fae5':'white';
+b.onclick=()=>{if(d.glasses.includes(i)){d.glasses=d.glasses.filter(n=>n!==i);d.water=Math.max(0,d.water-ml)}else{d.glasses.push(i);d.water+=ml}save();renderWater()};
+$('waterButtons').appendChild(b);
+}}
+$('waterGoal').onchange=renderWater;$('glassSize').onchange=renderWater;
+$('undoWater').onclick=()=>{let d=dayData(),i=d.glasses.pop();if(i!==undefined)d.water=Math.max(0,d.water-Math.min(+$('glassSize').value,Math.max(0,(+$('waterGoal').value||3000)-i*(+$('glassSize').value))));save();renderWater()};
+let alertTimer=null,lastAlert=0;
+$('enableAlerts').onclick=()=>{
+if(alertTimer)clearInterval(alertTimer);
+let mins=+$('interval').value*60000;
+$('alertStatus').textContent='Reminders active while this page remains open.';
+function alertNow(){
+let now=new Date(),hm=now.getHours()*60+now.getMinutes(),s=+$('startTime').value.slice(0,2)*60+ +$('startTime').value.slice(3),e=+$('endTime').value.slice(0,2)*60+ +$('endTime').value.slice(3);
+if(hm<s||hm>e||Date.now()-lastAlert<mins)return;
+lastAlert=Date.now();
+let t=$('reminderType').value,msg=t==='water'?'Time for a water break. Log your glass in your tracker.':t==='move'?'Stand up and move or stretch gently.':'Take a water break and move around gently.';
+$('alertStatus').textContent='Last reminder: '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+if('Notification'in window&&Notification.permission==='granted'){new Notification('Rushikesh Fit Plan',{body:msg})}else{alert(msg)}
+}
+if('Notification'in window&&Notification.permission==='default')Notification.requestPermission();
+alertNow();alertTimer=setInterval(alertNow,60000);
+};
+$('stopAlerts').onclick=()=>{if(alertTimer)clearInterval(alertTimer);alertTimer=null;$('alertStatus').textContent='Reminders stopped.'};
+function renderHistory(){
+let logs=store.logs||[];
+$('history').innerHTML=logs.length?'<table><tr><th>Date</th><th>Weight</th><th>Waist</th></tr>'+logs.slice().reverse().map(x=>'<tr><td>'+x.date+'</td><td>'+(x.weight||'—')+'</td><td>'+(x.waist||'—')+'</td></tr>').join('')+'</table>':'<p class="muted">No entries yet.</p>';
+}
+$('logDate').value=keyDate();$('weight').value='76';
+$('saveProgress').onclick=()=>{
+let weight=$('weight').value,waist=$('waist').value,date=$('logDate').value||keyDate();
+if(!weight&&!waist){alert('Enter your weight or waist.');return}
+if(!store.logs)store.logs=[];
+store.logs=store.logs.filter(x=>x.date!==date);store.logs.push({date,weight,waist});store.logs.sort((a,b)=>a.date.localeCompare(b.date));save();renderHistory();alert('Progress saved on this device.');
+};
+$('export').onclick=()=>{
+let a=document.createElement('a'),blob=new Blob([JSON.stringify(store,null,2)],{type:'application/json'});
+a.href=URL.createObjectURL(blob);a.download='rushikesh-fit-backup.json';a.click();URL.revokeObjectURL(a.href);
+};
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));
+document.querySelectorAll('section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));
+});
+$('workoutDay').onchange=()=>renderWorkout($('workoutDay').value);
+renderWorkout('mon');renderToday();renderFood();renderWater();renderHistory();
+</script>
+</body>
+</html>
