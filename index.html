@@ -208,6 +208,21 @@ th{color:#64748b}
 <p class="muted">Your checklist and progress are saved in this browser on this device. Export a backup regularly.</p>
 </main>
 
+<div id="exercisePopup" class="exercise-popup"
+     role="dialog" aria-modal="true"
+     aria-labelledby="exercisePopupTitle">
+  <div class="exercise-popup-card">
+    <h2 id="exercisePopupTitle">Exercise</h2>
+    <img id="exercisePopupImage" alt="Exercise demonstration"
+         hidden>
+    <p id="exercisePopupDescription"></p>
+    <h3>How to perform it</h3>
+    <ol id="exercisePopupSteps"></ol>
+    <button class="action" id="closeExercisePopup"
+            type="button">Close</button>
+  </div>
+</div>
+
 <script>
 const $=id=>document.getElementById(id);
 const keyDate=()=>{let d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
@@ -236,9 +251,107 @@ const meals=[
 ['Optional','200 ml low-fat milk; count in calories','~90–110 kcal; 6–7 g protein']
 ];
 function renderWorkout(k){
-let w=plan[k];$('workoutTitle').textContent=w.title+' — '+w.focus;
-$('exerciseList').innerHTML=w.items.map((x,i)=>'<div class="exercise"><b>'+ (i+1)+'. '+x[0]+' <span class="muted">'+x[1]+'</span></b><small>'+x[2]+'</small></div>').join('');
+
+const exerciseHelp = {
+  "Bench press": [
+    "Lie flat on the bench with feet planted. Grip the bar slightly wider than shoulder width.",
+    [
+      "Keep your shoulder blades stable against the bench.",
+      "Lower the bar under control toward your mid-chest.",
+      "Press upward without bouncing the bar."
+    ],
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg"
+  ],
+  "Incline dumbbell press": [
+    "Set the bench to a comfortable incline and hold dumbbells near your upper chest.",
+    [
+      "Keep your feet planted and wrists straight.",
+      "Press the dumbbells upward without banging them together.",
+      "Lower slowly until you reach a comfortable range."
+    ],
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg"
+  ],
+  "Lateral raise": [
+    "Stand tall with a light dumbbell in each hand and a slight bend in your elbows.",
+    [
+      "Keep your torso still.",
+      "Raise your arms out to the sides to about shoulder height.",
+      "Lower the weights slowly without swinging."
+    ],
+    "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg"
+  ]
+};
+
+function showExercise(name, reps, tip) {
+  const info = exerciseHelp[name];
+  $("exercisePopupTitle").textContent = name;
+  $("exercisePopupDescription").textContent =
+    (info ? info[0] : tip) + " Sets/reps: " + reps + ".";
+
+  const img = $("exercisePopupImage");
+  img.hidden = true;
+  img.onerror = () => { img.hidden = true; };
+  img.onload = () => { img.hidden = false; };
+
+  if (info && info[2]) img.src = info[2];
+  else img.removeAttribute("src");
+
+  const steps = info ? info[1] : [
+    tip,
+    "Use a controlled movement and comfortable range.",
+    "Stop if you feel sharp pain; ask a qualified trainer to check your form."
+  ];
+
+  $("exercisePopupSteps").replaceChildren(
+    ...steps.map(step => {
+      const li = document.createElement("li");
+      li.textContent = step;
+      return li;
+    })
+  );
+
+  $("exercisePopup").classList.add("open");
 }
+
+$("closeExercisePopup").onclick = () =>
+  $("exercisePopup").classList.remove("open");
+
+$("exercisePopup").onclick = e => {
+  if (e.target.id === "exercisePopup")
+    $("exercisePopup").classList.remove("open");
+};
+
+function renderWorkout(k) {
+  const w = plan[k];
+  $("workoutTitle").textContent = w.title + " — " + w.focus;
+
+  $("exerciseList").replaceChildren(
+    ...w.items.map((x, i) => {
+      const row = document.createElement("div");
+      row.className = "exercise";
+
+      const title = document.createElement("b");
+      const link = document.createElement("button");
+      link.type = "button";
+      link.className = "exercise-name";
+      link.textContent = (i + 1) + ". " + x[0];
+      link.onclick = () => showExercise(x[0], x[1], x[2]);
+
+      const reps = document.createElement("span");
+      reps.className = "muted";
+      reps.textContent = " " + x[1];
+
+      title.append(link, reps);
+
+      const tip = document.createElement("small");
+      tip.textContent = x[2];
+
+      row.append(title, tip);
+      return row;
+    })
+  );
+}
+
 function renderToday(){
 let k=['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()],w=plan[k],d=dayData();
 $('todayHeading').textContent=new Date().toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'});
