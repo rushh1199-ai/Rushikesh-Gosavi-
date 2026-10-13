@@ -97,6 +97,115 @@
       .card { padding:13px; }
       .fieldgrid { grid-template-columns:1fr 1fr; }
     }
+    
+/* iPhone layout and workout row fixes */
+html {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  overflow-x: hidden;
+}
+
+.wrap {
+  width: calc(100% - 24px);
+  max-width: 980px;
+  margin: 0 auto;
+  padding-top: 20px;
+}
+
+/* Keep each exercise in one compact horizontal row */
+.exercise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.exercise-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #101a2a;
+}
+
+/* Prevent checkboxes from stretching across the screen */
+.exercise-row input[type="checkbox"] {
+  appearance: auto;
+  -webkit-appearance: checkbox;
+  display: block;
+  width: 22px !important;
+  min-width: 22px;
+  max-width: 22px;
+  height: 22px;
+  min-height: 22px;
+  flex: 0 0 22px;
+  margin: 0;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
+/* Keep exercise names and rep details within the row */
+.exercise-name {
+  display: block;
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 0;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  background: transparent;
+  border: 0;
+}
+
+.exercise-name strong,
+.exercise-name span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.exercise-name span {
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+/* Prevent cards and grids from creating horizontal overflow */
+.card,
+.grid,
+.wide {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 620px) {
+  .wrap {
+    width: calc(100% - 24px);
+    padding-top: 16px;
+  }
+
+  .exercise-row {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .exercise-name strong {
+    font-size: 1rem;
+  }
+}
+
   </style>
 </head>
 <body>
