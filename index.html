@@ -40,6 +40,60 @@ th{color:#64748b}
 .note{background:#fff7df;padding:12px;border-radius:10px;font-size:12px;line-height:1.5}
 .exercise{padding:10px 0;border-bottom:1px solid #e2e8f0}
 .exercise b{display:block}.exercise small{color:#64748b}
+  
+.exercise-name {
+  color: #102a43;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  font-weight: bold;
+  font-size: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  cursor: pointer;
+}
+
+.exercise-popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 18px;
+  overflow-y: auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.exercise-popup.open {
+  display: flex;
+}
+
+.exercise-popup-card {
+  background: white;
+  border-radius: 18px;
+  padding: 20px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.exercise-popup-card img {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: #f1f5f9;
+  margin: 12px 0;
+}
+
+.exercise-popup-card p {
+  line-height: 1.6;
+}
+
 </style>
 </head>
 <body>
