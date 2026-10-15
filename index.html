@@ -3,213 +3,450 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b1220">
-<title>My Fitness Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173e2d">
+<title>Rushikesh Fit Coach</title>
 <style>
-:root{--bg:#0b1220;--panel:#121d2f;--panel2:#17243a;--text:#f3f6fb;--muted:#a9b7cb;--line:#2a3a53;--accent:#65e6ad;--blue:#7db5ff;--danger:#ff8f8f}
+:root{--green:#173e2d;--lime:#c8f169;--bg:#f2f5f0;--white:#fff;--text:#1b2920;--muted:#718078;--line:#e0e8df}
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;overflow-x:hidden}
-body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);background:var(--bg);color:var(--text);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.wrap{width:calc(100% - 24px);max-width:980px;margin:auto;padding:20px 0 40px}
-h1{font-size:clamp(1.6rem,5vw,2.2rem);margin:0 0 5px}h2{font-size:1.15rem;margin:0 0 12px}h3{font-size:1rem;margin:0 0 8px}p{margin:6px 0}
-.sub,.muted{color:var(--muted)}.sub{font-size:.92rem}
-.nav,.actions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,sans-serif}
 button,input,select,textarea{font:inherit}
-button{cursor:pointer;border:1px solid var(--line);border-radius:11px;padding:10px 13px;color:var(--text);background:var(--panel2);min-height:42px}
-button.active{background:#163f35;border-color:var(--accent);color:var(--accent)}
-button.primary{background:var(--accent);border-color:var(--accent);color:#082018;font-weight:700}
-button.danger{color:var(--danger)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;min-width:0}
-.wide{grid-column:1/-1}.statrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:14px}
-.stat{padding:12px;background:var(--panel2);border:1px solid var(--line);border-radius:12px;min-width:0}
-.stat strong{display:block;font-size:1.15rem}.stat span{color:var(--muted);font-size:.82rem}
-.progress{height:9px;background:#26364d;border-radius:99px;overflow:hidden;margin:10px 0}.progress div{height:100%;width:0;background:var(--accent)}
-.exercise-list,.checklist{display:flex;flex-direction:column;gap:9px;width:100%}
-.exercise-row,.checkrow{display:flex;align-items:center;gap:12px;width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:12px;background:#101a2a}
-.exercise-row input[type=checkbox],.checkrow input[type=checkbox]{appearance:auto;-webkit-appearance:checkbox;width:22px;min-width:22px;max-width:22px;height:22px;min-height:22px;flex:0 0 22px;margin:0;accent-color:var(--accent)}
-.exercise-name{display:block;flex:1 1 0;width:0;min-width:0;text-align:left;background:transparent;border:0;padding:4px 0;overflow-wrap:anywhere}
-.exercise-name strong{display:block;color:var(--blue)}.exercise-name span{display:block;color:var(--muted);font-size:.88rem}
-.checkrow label{flex:1;min-width:0}.checkrow small{display:block;color:var(--muted);font-size:.85rem}
-.meal{margin:0 0 14px}.meal h3{color:var(--accent)}
-.meal-open{display:block;width:100%;text-align:left;background:#101a2a;border:1px solid var(--line);border-radius:12px;padding:13px;min-height:0}
-.meal-open strong{display:block;color:var(--blue);font-size:1rem}.meal-open span{display:block;color:var(--muted);font-size:.88rem;margin-top:3px}
-.meal-check{display:flex;align-items:center;gap:10px;margin-top:8px;padding:9px 10px;border:1px solid var(--line);border-radius:10px}
-.fieldgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.field{display:grid;gap:5px}.field label{font-size:.88rem;color:var(--muted)}
-input,select,textarea{width:100%;min-width:0;border:1px solid var(--line);background:#0c1524;color:var(--text);border-radius:10px;padding:10px;min-height:42px}
-.notice{border-left:3px solid var(--blue);background:#13243a;padding:10px 12px;border-radius:8px;font-size:.9rem}
-.water-count{font-size:2rem;font-weight:800}.history-item{padding:11px 0;border-bottom:1px solid var(--line)}
-.hidden{display:none!important}
-.modal-backdrop{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(0,0,0,.78)}
-.modal{width:min(100%,640px);max-height:88vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px}
-.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.modal-head h2{font-size:1.25rem}
-.modal-close{flex-shrink:0}.steps{padding-left:22px}.steps li{margin:7px 0}
-.nutrition-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0}
-.nutrition-cell{padding:10px 7px;text-align:center;background:var(--panel2);border:1px solid var(--line);border-radius:10px}
-.nutrition-cell strong{display:block;font-size:1.05rem}.nutrition-cell span{display:block;color:var(--muted);font-size:.75rem}
-.ingredients{padding-left:20px}.ingredients li{margin:5px 0}
-.footer{text-align:center;color:var(--muted);font-size:.82rem;margin-top:20px}
-@media(max-width:620px){.grid{grid-template-columns:1fr}.wide{grid-column:auto}.card{padding:13px}.stat{padding:9px}.stat strong{font-size:1.02rem}.fieldgrid{grid-template-columns:1fr 1fr}.nutrition-grid{gap:5px}.nutrition-cell{padding:8px 3px}.nutrition-cell strong{font-size:.95rem}.modal{padding:15px}}
+button{border:0;border-radius:11px;padding:10px 14px;background:var(--green);color:white;font-weight:700;cursor:pointer}
+button.secondary{background:#e9f1e8;color:var(--green);border:1px solid var(--line)}
+button.danger{background:#fff0ee;color:#a63832}
+input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:10px;background:white;color:var(--text)}
+label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:8px 0 4px}
+header{background:var(--green);color:white;padding:24px 18px}
+.wrap{max-width:1100px;margin:auto}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{background:var(--lime);color:var(--green);font-weight:900;padding:12px;border-radius:14px;font-size:20px}
+header h1{margin:0;font-size:24px}
+header p{margin:3px 0;color:#d7e4d9;font-size:13px}
+header .tag{color:var(--lime);font-size:11px;font-weight:800;letter-spacing:1.5px}
+nav{display:flex;gap:7px;overflow:auto;padding:12px 0}
+nav button{flex-shrink:0;background:white;color:var(--green);border:1px solid var(--line)}
+nav button.active{background:var(--green);color:white}
+main{padding:0 16px 35px}
+.page{display:none}
+.page.active{display:block}
+.hero{background:var(--green);color:white;padding:23px;border-radius:20px;margin:8px 0 16px}
+.hero h2{font-size:clamp(25px,4vw,38px);line-height:1.15;margin:6px 0 10px}
+.hero p{color:#d7e4d9;margin:0}
+.eyebrow{font-size:11px;font-weight:800;letter-spacing:1.4px;color:#47835a}
+.hero .eyebrow{color:var(--lime)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.card{background:white;border:1px solid var(--line);border-radius:17px;padding:17px;margin-bottom:13px;min-width:0}
+.card h3{margin:0 0 7px;font-size:17px}
+.muted{color:var(--muted);font-size:12px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-bottom:13px}
+.stat{background:white;border:1px solid var(--line);border-radius:14px;padding:12px;min-width:0}
+.stat span{display:block;font-size:11px;color:var(--muted)}
+.stat strong{font-size:22px;display:block;overflow-wrap:anywhere}
+.bar{height:7px;border-radius:9px;background:#e8eee7;overflow:hidden;margin:8px 0}
+.bar div{height:100%;background:#43885b;width:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.food{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}
+.food h4{margin:0 0 3px}
+.food p{margin:4px 0;color:var(--muted);font-size:12px}
+.check{display:flex;align-items:flex-start;gap:9px;margin:10px 0}
+.check input{width:18px;margin-top:3px;accent-color:#43885b}
+.check span{flex:1}
+.small{font-size:12px}
+.pill{display:inline-block;padding:4px 8px;border-radius:20px;background:#e9f4e9;color:#28623e;font-size:11px;font-weight:800}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.full{grid-column:1/-1}
+.recipe{border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.recipe h4{margin:0}
+.recipe p{font-size:12px;color:var(--muted)}
+.recipe details{font-size:13px}
+.recipe summary{cursor:pointer;font-weight:700;color:var(--green);margin:8px 0}
+.exercise{border-top:1px solid var(--line);padding:12px 0}
+.exercise:first-of-type{border-top:0}
+.exercise b{display:block}
+.exercise .muted{margin:3px 0}
+.water{display:flex;gap:5px;flex-wrap:wrap;margin:14px 0}
+.glass{width:25px;height:32px;border:1px solid #80b591;border-radius:5px 5px 9px 9px;background:#edf8ef}
+.glass.full{background:#72b88a}
+canvas{width:100%;height:200px;display:block}
+.notice{background:#fff7e8;border:1px solid #f1e1b9;border-radius:12px;padding:12px;font-size:12px}
+footer{text-align:center;padding:20px;color:var(--muted);font-size:11px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.hero{padding:19px}.card{padding:14px}}
 </style>
 </head>
 <body>
+<header>
+<div class="wrap brand">
+<div class="logo">RF</div>
+<div>
+<div class="tag">YOUR PERSONAL FITNESS PLAN</div>
+<h1>Rushikesh Fit Coach</h1>
+<p>Fat loss · Muscle retention · Strong abs</p>
+</div>
+</div>
+</header>
+
 <main class="wrap">
-<header><h1>My Fitness Dashboard</h1><p class="sub">Workout · nutrition · hydration · progress</p></header>
-<nav class="nav">
-<button class="active" data-view="dashboard">Dashboard</button>
-<button data-view="workout">Workout</button>
-<button data-view="diet">Diet</button>
-<button data-view="water">Water</button>
-<button data-view="progress">Progress</button>
+<nav>
+<button class="active" data-page="today">🏠 Today</button>
+<button data-page="nutrition">🥗 Nutrition</button>
+<button data-page="training">🏋️ Training</button>
+<button data-page="recipes">🍳 Recipes</button>
+<button data-page="progress">📈 Progress</button>
+<button data-page="settings">⚙️ Settings</button>
 </nav>
 
-<section id="view-dashboard" class="view">
-<div class="statrow">
-<div class="stat"><span>Workout</span><strong id="dashWorkout">Push</strong></div>
-<div class="stat"><span>Water today</span><strong id="dashWater">0 ml</strong></div>
-<div class="stat"><span>Protein checked</span><strong id="dashProtein">0 g</strong></div>
+<section id="today" class="page active">
+<div class="row">
+<div><div class="eyebrow">YOUR DAILY DASHBOARD</div><h2 style="margin:3px 0">Today's plan</h2></div>
+<div style="min-width:150px"><label for="date">Select date</label><input id="date" type="date"></div>
 </div>
+
+<div class="hero">
+<div class="eyebrow">CONSISTENCY BEATS PERFECTION</div>
+<h2>Build a leaner,<br>stronger you.</h2>
+<p>Log every meal, complete your training and track your progress. One day at a time.</p>
+<div class="actions">
+<button style="background:var(--lime);color:var(--green)" onclick="openFood()">+ Log food</button>
+<button class="secondary" onclick="go('training')">View workout</button>
+</div>
+</div>
+
+<div class="stats">
+<div class="stat"><span>Calories eaten</span><strong id="totalK">0</strong><span id="goalK">of 1,800 kcal</span><div class="bar"><div id="barK"></div></div></div>
+<div class="stat"><span>Protein</span><strong id="totalP">0 g</strong><span id="goalP">Target 145 g</span><div class="bar"><div id="barP"></div></div></div>
+<div class="stat"><span>Water</span><strong id="waterText">0 ml</strong><span id="waterGoalText">Target 3,000 ml</span><div class="bar"><div id="barW"></div></div></div>
+<div class="stat"><span>Workout</span><strong id="doneCount">0</strong><span>Exercises completed</span><div class="bar"><div id="barE"></div></div></div>
+</div>
+
 <div class="grid">
-<article class="card"><h2>Today's progress</h2><p class="sub" id="todayLabel"></p><div class="progress"><div id="dayProgress"></div></div><p class="sub" id="progressText">0% complete</p><div class="actions"><button class="primary" onclick="showView('workout')">Open workout</button><button onclick="showView('diet')">Open diet</button></div></article>
-<article class="card"><h2>Quick water log</h2><div class="water-count" id="dashWaterBig">0 ml</div><p class="sub">Target: <span id="dashWaterTarget">2500</span> ml</p><div class="actions"><button class="primary" onclick="addWater(250)">+250 ml</button><button onclick="addWater(500)">+500 ml</button></div></article>
-<article class="card wide"><h2>Today's meals</h2><p class="sub">Tap a meal to view ingredients and preparation.</p><div id="dashboardMeals"></div><button onclick="showView('diet')">Open diet plan</button></article>
-<article class="card wide"><h2>Water reminders</h2><p class="sub">Reminders work while this page is active; iPhone Safari may pause them in the background.</p><div class="fieldgrid"><div class="field"><label for="waterTarget">Daily water target (ml)</label><input id="waterTarget" type="number" min="250" value="2500"></div><div class="field"><label for="reminderMinutes">Reminder interval (minutes)</label><input id="reminderMinutes" type="number" min="15" max="240" value="60"></div></div><div class="actions"><button class="primary" onclick="saveSettings()">Save settings</button><button onclick="startReminders()">Start reminders</button><button onclick="stopReminders()">Stop reminders</button></div><p id="reminderStatus" class="sub"></p></article>
+<div class="card">
+<h3>🥗 Your meals</h3>
+<p class="muted">Suggested meal times. Log what you actually eat, including snacks or restaurant meals.</p>
+<div id="mealSummary"></div>
+<div class="actions"><button onclick="go('nutrition')">Manage meals</button><button class="secondary" onclick="go('recipes')">Find a recipe</button></div>
+</div>
+<div class="card">
+<h3>💧 Water tracker</h3>
+<p class="muted">Keep sipping water through the day.</p>
+<div class="water" id="glasses"></div>
+<div class="row"><b id="waterPercent">0% of goal</b><span class="muted">Adjust in Settings</span></div>
+<div class="actions"><button onclick="changeWater(250)">+250 ml</button><button onclick="changeWater(500)">+500 ml</button><button class="secondary" onclick="changeWater(-250)">−250 ml</button></div>
+</div>
+<div class="card">
+<h3>✅ Daily habits</h3>
+<div id="habits"></div>
+</div>
+<div class="card">
+<h3>📝 Quick check-in</h3>
+<form id="quickForm">
+<label>Today's weight (kg)</label><input id="quickWeight" type="number" step=".1" placeholder="e.g. 76.5">
+<label>Waist measurement (cm)</label><input id="quickWaist" type="number" step=".1" placeholder="Optional">
+<label>Notes</label><textarea id="quickNotes" rows="2" placeholder="Energy, hunger, achievements..."></textarea>
+<div class="actions"><button>Save check-in</button></div>
+</form>
+</div>
 </div>
 </section>
 
-<section id="view-workout" class="view hidden">
-<article class="card"><h2>Workout plan</h2><p class="sub">Choose a day, tick completed exercises, or tap an exercise for its guide.</p>
-<div class="nav"><button class="active" data-day="Push">Push</button><button data-day="Pull">Pull</button><button data-day="Legs">Legs</button></div>
-<div class="field" style="max-width:260px;margin-bottom:14px"><label for="workoutDate">Workout date</label><input id="workoutDate" type="date"></div>
-<div id="workoutContent"></div><div class="actions"><button class="primary" onclick="saveWorkout()">Save workout</button><button onclick="resetWorkout()">Uncheck exercises</button></div>
-</article>
+<section id="nutrition" class="page">
+<div class="eyebrow">FUEL YOUR TRAINING</div><h2>Nutrition & food diary</h2>
+<div class="notice">Nutrition values are estimates. Weigh food consistently and check product labels. For meat, rice, dal and other foods, specify whether the weight is raw or cooked.</div>
+<div class="card" style="margin-top:13px">
+<div class="row"><div><h3>Food diary</h3><p class="muted">Record planned meals and off-plan food without guilt.</p></div><button onclick="openFood()">+ Add food</button></div>
+<div id="foodList"></div>
+</div>
+<div class="card">
+<h3>Daily nutrition totals</h3>
+<div class="stats">
+<div class="stat"><span>Calories</span><strong id="nK">0</strong><span>kcal</span></div>
+<div class="stat"><span>Protein</span><strong id="nP">0 g</strong><span>Target-based</span></div>
+<div class="stat"><span>Carbs</span><strong id="nC">0 g</strong><span>Estimated</span></div>
+<div class="stat"><span>Fat</span><strong id="nF">0 g</strong><span>Estimated</span></div>
+</div>
+<button class="secondary" onclick="go('recipes')">Browse recipes</button>
+</div>
 </section>
 
-<section id="view-diet" class="view hidden">
-<article class="card"><h2>Daily nutrition checklist</h2><p class="sub">Tap any meal card for ingredient quantities, cooking steps and estimated nutrition.</p>
-<div class="statrow"><div class="stat"><span>Protein checked</span><strong id="dietProtein">0 g</strong></div><div class="stat"><span>Protein target</span><strong id="proteinTargetLabel">140 g</strong></div><div class="stat"><span>Meals completed</span><strong id="mealsDone">0/6</strong></div></div>
-<div class="fieldgrid"><div class="field"><label for="proteinTarget">Protein target (g)</label><input id="proteinTarget" type="number" min="40" max="300" value="140"></div><div class="field"><label for="calorieTarget">Calorie target (kcal)</label><input id="calorieTarget" type="number" min="800" max="6000" value="2000"></div></div>
-<h3 style="margin-top:18px">Choose your diet preference</h3>
-<div class="nav"><button class="active" data-diet="veg">Vegetarian</button><button data-diet="nonveg">Non-vegetarian</button></div>
-<p class="sub" id="dietPreferenceLabel">Showing vegetarian meals.</p><div id="dietContent"></div>
-<div class="actions"><button class="primary" onclick="saveSettings()">Save targets</button><button onclick="uncheckMeals()">Uncheck all meals</button></div>
-<p class="notice">Nutrition values are estimates. Fat loss cannot be targeted to one specific body area.</p>
-</article>
+<section id="training" class="page">
+<div class="eyebrow">TRAIN WITH PURPOSE</div><h2>Weekly training plan</h2>
+<div class="card">
+<div class="row"><div><h3 id="workoutTitle">Today's workout</h3><p class="muted" id="workoutDesc"></p></div><span class="pill" id="workoutPill">Strength</span></div>
+<div id="exerciseList"></div>
+<label>Workout notes</label><textarea id="workoutNotes" rows="3" placeholder="Weights used, reps achieved, how you felt..."></textarea>
+<div class="actions"><button onclick="saveWorkoutNotes()">Save notes</button><button class="secondary" onclick="resetWorkout()">Reset checklist</button></div>
+</div>
+<div class="card">
+<h3>Weekly split</h3>
+<div class="food"><b>Monday — Push A</b><p>Chest, shoulders and triceps.</p></div>
+<div class="food"><b>Tuesday — Pull A</b><p>Back and biceps.</p></div>
+<div class="food"><b>Wednesday — Legs + Core A</b><p>Quads, hamstrings, glutes and abs.</p></div>
+<div class="food"><b>Thursday — Push B</b><p>Alternate chest, shoulder and triceps exercises.</p></div>
+<div class="food"><b>Friday — Pull B</b><p>Alternate back and biceps exercises.</p></div>
+<div class="food"><b>Saturday — Legs + Core B</b><p>Lower body, core and optional light cardio.</p></div>
+<div class="food"><b>Sunday — Recovery</b><p>Easy walk, gentle mobility and rest. Steam is optional and does not burn body fat.</p></div>
+<div class="notice">Warm up for 5–10 minutes. Use controlled technique and a weight you can manage. Stop if you feel sharp pain, dizziness or unusual symptoms. Add weight gradually only when your form is consistent.</div>
+</div>
 </section>
 
-<section id="view-water" class="view hidden"><article class="card"><h2>Water tracker</h2><p class="sub" id="waterDateLabel"></p><div class="water-count"><span id="waterTotal">0</span> ml</div><div class="progress"><div id="waterProgress"></div></div><p class="sub" id="waterProgressText"></p><div class="actions"><button class="primary" onclick="addWater(250)">+250 ml</button><button onclick="addWater(500)">+500 ml</button><button onclick="addWater(750)">+750 ml</button><button onclick="undoWater()">Undo last</button></div><div class="fieldgrid" style="margin-top:14px"><div class="field"><label for="customWater">Custom amount (ml)</label><input id="customWater" type="number" min="1" max="3000" value="250"></div><button style="align-self:end" onclick="addCustomWater()">Add amount</button></div><div class="actions"><button class="danger" onclick="resetWater()">Reset today's water</button></div></article></section>
+<section id="recipes" class="page">
+<div class="eyebrow">SIMPLE HIGH-PROTEIN FOOD</div><h2>Recipe studio</h2>
+<p class="muted">Choose a recipe for breakfast, lunch or dinner. Values depend on ingredients and preparation.</p>
+<div class="card">
+<label>Search recipes</label><input id="recipeSearch" placeholder="Search eggs, paneer, chicken, dal..." oninput="renderRecipes()">
+<label>Meal type</label><select id="recipeFilter" onchange="renderRecipes()"><option value="all">All meals</option><option>Breakfast</option><option>Lunch</option><option>Dinner</option></select>
+<div id="recipeList"></div>
+</div>
+</section>
 
-<section id="view-progress" class="view hidden"><div class="grid">
-<article class="card"><h2>Log measurements</h2><div class="fieldgrid"><div class="field"><label for="logDate">Date</label><input id="logDate" type="date"></div><div class="field"><label for="weight">Weight (kg)</label><input id="weight" type="number" min="20" max="400" step=".1"></div><div class="field"><label for="waist">Waist (cm)</label><input id="waist" type="number" min="20" max="250" step=".1"></div><div class="field"><label for="hips">Hips (cm)</label><input id="hips" type="number" min="20" max="250" step=".1"></div></div><div class="field" style="margin-top:10px"><label for="notes">Notes</label><textarea id="notes" rows="3"></textarea></div><div class="actions"><button class="primary" onclick="saveProgress()">Save progress</button></div></article>
-<article class="card"><h2>Data backup</h2><p class="sub">Your records are saved in this browser and do not automatically sync between devices.</p><div class="actions"><button class="primary" onclick="exportData()">Export JSON backup</button><button onclick="exportCSV()">Export progress CSV</button><button class="danger" onclick="clearData()">Delete all data</button></div><p class="sub" id="backupStatus"></p></article>
-<article class="card wide"><h2>Progress history</h2><div id="historyList"></div></article>
-</div></section>
-<p class="footer">Personal tracker only, not medical advice. Export a backup regularly.</p>
+<section id="progress" class="page">
+<div class="eyebrow">MEASURE WHAT MATTERS</div><h2>Progress tracker</h2>
+<div class="card">
+<h3>Weight and waist history</h3><p class="muted">Your chart updates when you save a check-in.</p>
+<canvas id="weightChart" width="700" height="220"></canvas>
+<div id="history"></div>
+</div>
+<div class="card">
+<h3>Record progress</h3>
+<form id="progressForm">
+<div class="formgrid">
+<div><label>Date</label><input id="progressDate" type="date" required></div>
+<div><label>Weight (kg)</label><input id="progressWeight" type="number" step=".1" min="30" max="300" required></div>
+<div><label>Waist (cm)</label><input id="progressWaist" type="number" step=".1" min="30" max="250"></div>
+<div class="full"><label>Notes</label><textarea id="progressNotes" rows="2" placeholder="Progress, measurements or observations"></textarea></div>
+</div>
+<div class="actions"><button>Save progress</button></div>
+</form>
+</div>
+</section>
+
+<section id="settings" class="page">
+<div class="eyebrow">PERSONALISE YOUR PLAN</div><h2>Settings & backup</h2>
+<div class="card">
+<h3>Daily targets</h3>
+<form id="settingsForm">
+<div class="formgrid">
+<div><label>Calories (kcal)</label><input id="sK" type="number" min="1000" max="5000" required></div>
+<div><label>Protein (g)</label><input id="sP" type="number" min="30" max="300" required></div>
+<div><label>Carbohydrates (g)</label><input id="sC" type="number" min="30" max="600" required></div>
+<div><label>Fat (g)</label><input id="sF" type="number" min="20" max="200" required></div>
+<div><label>Water goal (ml)</label><input id="sW" type="number" min="500" max="10000" required></div>
+<div><label>Daily steps goal</label><input id="sS" type="number" min="1000" max="30000" required></div>
+</div>
+<div class="actions"><button>Save targets</button></div>
+</form>
+</div>
+<div class="card">
+<h3>Daily activity</h3>
+<form id="activityForm">
+<label>Steps walked</label><input id="steps" type="number" min="0" placeholder="e.g. 8000">
+<label>Sleep (hours)</label><input id="sleep" type="number" min="0" max="24" step=".5" placeholder="e.g. 7.5">
+<label>Workout duration (minutes)</label><input id="minutes" type="number" min="0" placeholder="e.g. 45">
+<div class="actions"><button>Save activity</button></div>
+</form>
+<p class="muted" id="activitySummary"></p>
+</div>
+<div class="card">
+<h3>Data backup</h3>
+<p class="muted">Export your tracker data regularly. Data is stored in this browser and is not automatically synced with ChatGPT or another device.</p>
+<div class="actions"><button onclick="exportData()">Export backup</button><button class="secondary" onclick="document.getElementById('importFile').click()">Import backup</button><input id="importFile" type="file" accept=".json,application/json" hidden></div>
+<div class="actions"><button class="danger" onclick="clearToday()">Clear selected day</button></div>
+</div>
+</section>
+
+<footer>Rushikesh Fit Coach · Be consistent, not perfect.<br>Calorie and protein values are estimates, not medical advice.</footer>
 </main>
 
-<div id="detailModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="detailTitle" onclick="if(event.target===this)closeModal()"><div class="modal"><div class="modal-head"><div><h2 id="detailTitle">Meal details</h2><p class="sub" id="detailSubtitle"></p></div><button class="modal-close" onclick="closeModal()">Close ✕</button></div><div id="detailNutrition"></div><h3>Ingredients and quantities</h3><ul class="ingredients" id="detailIngredients"></ul><h3>How to prepare</h3><ol class="steps" id="detailSteps"></ol><p class="notice" id="detailTip"></p></div></div>
-<div id="exerciseModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="exerciseTitle" onclick="if(event.target===this)closeExercise()"><div class="modal"><div class="modal-head"><h2 id="exerciseTitle">Exercise guide</h2><button onclick="closeExercise()">Close ✕</button></div><p class="sub" id="exerciseMeta"></p><img id="exerciseImage" class="hidden" alt="Exercise demonstration" style="width:100%;max-height:240px;object-fit:contain"><p id="exerciseDescription"></p><h3>How to do it</h3><ol class="steps" id="exerciseSteps"></ol><p class="notice" id="exerciseTip"></p><p class="sub" id="exerciseImageNote"></p></div></div>
+<dialog id="foodDialog" style="border:0;border-radius:18px;width:min(520px,94vw);padding:20px">
+<div class="row"><h3 id="foodDialogTitle">Log food</h3><button class="secondary" type="button" onclick="foodDialog.close()">✕</button></div>
+<form id="foodForm">
+<input id="foodId" type="hidden">
+<div class="formgrid">
+<div class="full"><label>Food or meal name</label><input id="foodName" required placeholder="e.g. Chicken biryani"></div>
+<div><label>Meal</label><select id="foodMeal"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option></select></div>
+<div><label>Quantity / portion</label><input id="foodQty" placeholder="e.g. 1 bowl, 200 g"></div>
+<div><label>Calories (kcal)</label><input id="foodK" type="number" min="0" required></div>
+<div><label>Protein (g)</label><input id="foodP" type="number" min="0" required></div>
+<div><label>Carbs (g)</label><input id="foodC" type="number" min="0" value="0" required></div>
+<div><label>Fat (g)</label><input id="foodF" type="number" min="0" value="0" required></div>
+<div class="full"><label>Notes / ingredients</label><textarea id="foodNotes" rows="2"></textarea></div>
+<div class="full"><label class="check"><input id="foodEaten" type="checkbox" checked><span>Mark as already eaten</span></label></div>
+</div>
+<div class="actions"><button>Save food</button><button type="button" class="secondary" onclick="foodDialog.close()">Cancel</button></div>
+</form>
+</dialog>
 
 <script>
-"use strict";
-const KEY="fitnessDashboard_v3";
-const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`};
-const defaults=()=>({days:{},water:{},progress:[],settings:{waterTarget:2500,reminderMinutes:60,proteinTarget:140,calorieTarget:2000,diet:"veg"}});
-function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(!x)return defaults();const d=defaults();return {...d,...x,settings:{...d.settings,...(x.settings||{})},days:x.days||{},water:x.water||{},progress:Array.isArray(x.progress)?x.progress:[]}}catch(e){return defaults()}}
-let state=load(),selectedWorkout="Push",selectedDiet=state.settings.diet==="nonveg"?"nonveg":"veg",timer=null;
-const workouts={
-Push:[["Bench press","3 sets × 8–12 reps"],["Incline dumbbell press","3 × 8–12"],["Shoulder press","3 × 8–12"],["Lateral raise","3 × 12–15"],["Triceps pushdown","3 × 10–15"],["Overhead triceps extension","2 × 10–15"]],
-Pull:[["Lat pulldown","3 × 8–12"],["Seated cable row","3 × 8–12"],["One-arm dumbbell row","3 × 8–12 each side"],["Face pull","3 × 12–15"],["Dumbbell curl","3 × 10–15"],["Hammer curl","2 × 10–15"]],
-Legs:[["Squat","3 × 8–12"],["Leg press","3 × 10–12"],["Romanian deadlift","3 × 8–12"],["Leg curl","3 × 10–15"],["Calf raise","3 × 12–20"],["Plank","3 × 30–60 seconds"]]
+const $=id=>document.getElementById(id);
+const today=()=>new Date().toLocaleDateString('en-CA');
+let dateKey=today();
+const defaultState={
+settings:{k:1800,p:145,c:170,f:55,w:3000,s:8000},
+days:{}
 };
-
-const recipes={
-veg:[
-{id:"breakfast",title:"Breakfast",name:"Greek yogurt oats bowl",kcal:390,p:27,c:49,f:9,ingredients:["Rolled oats — 40 g","Plain Greek yogurt — 170 g","Milk — 100 ml","Banana — 80 g","Chia seeds — 5 g"],steps:["Put the oats and milk in a bowl or jar.","Mix in the yogurt and chia seeds.","Slice the banana and place it on top.","Eat immediately, or refrigerate for 2–4 hours for softer oats."],tip:"Use unsweetened yogurt and milk. Nutrition depends on the brand and banana size."},
-{id:"snack1",title:"Mid-morning",name:"Sprouts and roasted chana salad",kcal:265,p:15,c:42,f:5,ingredients:["Boiled moong sprouts — 150 g","Roasted chana — 25 g","Cucumber — 50 g","Tomato — 50 g","Onion — 20 g","Lemon juice — 10 ml"],steps:["Rinse the vegetables and chop them finely.","Use thoroughly cooked sprouts, especially if food safety is a concern.","Mix sprouts, roasted chana and vegetables in a bowl.","Add lemon juice and a pinch of salt, then mix."],tip:"Protein depends on the type and cooked weight of sprouts and chana."},
-{id:"lunch",title:"Lunch",name:"Dal, paneer and roti plate",kcal:610,p:30,c:78,f:18,ingredients:["Cooked dal — 180 g","Paneer — 80 g","Whole-wheat atta — 40 g (about 1 medium roti)","Mixed vegetables — 150 g","Oil — 5 g (1 tsp)","Spices, salt and water — as needed"],steps:["Cook the dal with water, turmeric and spices until soft.","Cook the roti from the measured atta; avoid adding extra ghee if tracking calories.","Cook vegetables using the measured oil and seasonings.","Serve the dal, paneer, vegetables and roti together."],tip:"Use low-fat paneer if preferred. Calories change with oil, paneer type and roti size."},
-{id:"snack2",title:"Evening snack",name:"Curd, milk and roasted chana",kcal:260,p:17,c:31,f:7,ingredients:["Plain curd — 150 g","Milk — 150 ml","Roasted chana — 20 g"],steps:["Serve the curd in a bowl.","Pour the milk into a glass.","Measure the roasted chana into a small bowl and eat alongside."],tip:"Choose unsweetened dairy; sweetened products add extra calories."},
-{id:"dinner",title:"Dinner",name:"Tofu and vegetable stir-fry with rice",kcal:510,p:27,c:63,f:15,ingredients:["Firm tofu — 150 g","Cooked rice — 150 g","Mixed vegetables — 200 g","Oil — 5 g (1 tsp)","Soy sauce — 5–10 ml, optional","Garlic and spices — to taste"],steps:["Press tofu gently with a clean towel and cut into cubes.","Heat the measured oil in a pan; cook tofu until lightly golden.","Add chopped vegetables and cook until tender but not mushy.","Season lightly, then serve with the measured cooked rice."],tip:"Soy sauce can be high in sodium. Measure the oil rather than pouring freely."},
-{id:"extra",title:"Optional protein",name:"Milk and peanut snack",kcal:210,p:12,c:15,f:11,ingredients:["Milk — 200 ml","Peanuts — 15 g"],steps:["Measure the milk into a glass.","Measure the peanuts separately and eat alongside.","Use this optional snack only if it fits your hunger and daily targets."],tip:"Peanuts are energy-dense, so measure the portion if tracking calories."}
-],
-nonveg:[
-{id:"breakfast",title:"Breakfast",name:"Eggs with whole-wheat toast and milk",kcal:420,p:29,c:39,f:15,ingredients:["Whole eggs — 2 large (about 100 g without shell)","Whole-wheat bread — 2 slices (about 60 g)","Milk — 150 ml","Tomato — 50 g","Oil — 3 g (about ½ tsp)"],steps:["Beat the eggs in a bowl and mix in chopped tomato.","Heat the measured oil in a non-stick pan and cook the eggs until fully set.","Toast the bread.","Serve with the milk. Keep eggs refrigerated and cook thoroughly."],tip:"Egg size and bread labels change the nutrition totals."},
-{id:"snack1",title:"Mid-morning",name:"Sprouts and roasted chana salad",kcal:265,p:15,c:42,f:5,ingredients:["Boiled moong sprouts — 150 g","Roasted chana — 25 g","Cucumber — 50 g","Tomato — 50 g","Onion — 20 g","Lemon juice — 10 ml"],steps:["Wash and chop the vegetables.","Use thoroughly cooked sprouts.","Mix sprouts, roasted chana and vegetables.","Add lemon juice and a pinch of salt."],tip:"Use cooked sprouts rather than raw sprouts if food safety is a concern."},
-{id:"lunch",title:"Lunch",name:"Chicken, rice and vegetables",kcal:590,p:43,c:66,f:13,ingredients:["Raw skinless chicken breast — 150 g","Cooked rice — 180 g","Mixed vegetables — 200 g","Oil — 5 g (1 tsp)","Spices, lemon and salt — to taste"],steps:["Cut chicken on a separate clean board and season with spices and lemon.","Heat the measured oil in a pan and cook chicken completely; the centre should reach 74°C/165°F.","Steam or sauté vegetables separately until tender.","Serve with the measured cooked rice."],tip:"Keep raw chicken separate from ready-to-eat food. Nutrition is based on the listed raw chicken weight."},
-{id:"snack2",title:"Evening snack",name:"Greek yogurt and fruit",kcal:220,p:19,c:28,f:3,ingredients:["Plain Greek yogurt — 170 g","Apple — 120 g","Cinnamon — optional"],steps:["Spoon the yogurt into a bowl.","Wash and chop the apple.","Mix or serve the apple alongside the yogurt; add cinnamon if desired."],tip:"Use plain yogurt and check the label for protein and added sugar."},
-{id:"dinner",title:"Dinner",name:"Fish, roti and vegetables",kcal:500,p:38,c:52,f:13,ingredients:["Raw boneless fish fillet — 160 g","Whole-wheat atta — 40 g (about 1 medium roti)","Mixed vegetables — 200 g","Oil — 5 g (1 tsp)","Lemon and spices — to taste"],steps:["Season the fish with lemon and spices.","Cook in a pan using the measured oil until opaque and it flakes easily; cook to a safe internal temperature.","Cook the roti from the measured atta.","Serve with vegetables cooked or steamed without unmeasured oil."],tip:"Fish varieties differ in fat content. Check carefully for bones."},
-{id:"extra",title:"Optional protein",name:"Boiled eggs and milk",kcal:215,p:19,c:10,f:10,ingredients:["Boiled eggs — 2 large","Milk — 100 ml"],steps:["Place eggs in water, bring to a boil and cook until firm, around 9–12 minutes depending on size.","Cool safely, peel and serve with the milk.","Refrigerate leftovers promptly."],tip:"Include this optional snack only if you need the extra food to meet your daily intake."}
-]};
-
-const exerciseHelp={
-"Bench press":{desc:"Chest-focused press, also using triceps and front shoulders.",steps:["Plant feet and keep upper back supported on the bench.","Grip the bar slightly wider than shoulder width.","Lower toward mid-chest under control.","Press upward without bouncing."],tip:"Use a spotter or safety bars."},
-"Incline dumbbell press":{desc:"Press that emphasizes the upper chest.",steps:["Set bench to about 20–35 degrees.","Start dumbbells beside upper chest, wrists straight.","Press upward with control.","Lower slowly to a comfortable stretch."],tip:"Avoid a steep bench angle or painful shoulder range."},
-"Shoulder press":{desc:"Vertical press for shoulders and triceps.",steps:["Sit or stand tall and brace your abdomen.","Start weights around shoulder height.","Press up without arching your lower back.","Lower slowly."],tip:"Reduce the load if you lean backward."},
-"Lateral raise":{desc:"Isolation exercise for side deltoids.",steps:["Hold light dumbbells by your sides with elbows slightly bent.","Raise arms out to about shoulder height.","Pause, then lower slowly.","Keep torso still."],tip:"Use light weights and controlled reps."},
-"Triceps pushdown":{desc:"Cable exercise for the triceps.",steps:["Keep elbows close to your torso.","Push the handle down by straightening elbows.","Pause briefly.","Return slowly."],tip:"Avoid rocking your body."},
-"Overhead triceps extension":{desc:"Overhead movement for triceps.",steps:["Hold a dumbbell securely overhead with both hands.","Keep elbows pointing mostly forward.","Bend elbows to lower the weight behind your head.","Extend elbows to return."],tip:"Use a comfortable range."},
-"Lat pulldown":{desc:"Vertical pull for lats and upper back.",steps:["Secure thighs under pads and grip the bar.","Keep chest lifted.","Pull bar toward upper chest by driving elbows down.","Return slowly."],tip:"Do not pull behind the neck."},
-"Seated cable row":{desc:"Horizontal pull for back and biceps.",steps:["Sit tall with spine neutral.","Pull handle toward lower ribs.","Move elbows back and gently squeeze shoulder blades.","Extend arms slowly."],tip:"Avoid momentum."},
-"One-arm dumbbell row":{desc:"Unilateral back exercise.",steps:["Support yourself on a stable bench.","Let dumbbell hang below shoulder.","Pull elbow toward hip without twisting.","Lower slowly and switch sides."],tip:"Keep hips and shoulders square."},
-"Face pull":{desc:"Cable movement for rear shoulders and upper back.",steps:["Set rope around face height.","Pull rope toward face with elbows out.","Separate rope ends.","Return slowly."],tip:"Use controlled resistance."},
-"Dumbbell curl":{desc:"Biceps curl.",steps:["Stand tall with elbows near sides.","Curl dumbbells without swinging.","Keep wrists neutral.","Lower slowly."],tip:"Do not swing the weights."},
-"Hammer curl":{desc:"Curl variation for biceps and forearms.",steps:["Hold dumbbells with palms facing inward.","Keep elbows near sides.","Curl without rotating wrists.","Lower under control."],tip:"Keep upper arms still."},
-"Squat":{desc:"Compound lower-body movement.",steps:["Stand about shoulder-width apart.","Brace and sit hips down and back.","Keep feet planted and knees tracking with toes.","Stand by pushing through the whole foot."],tip:"Use a comfortable, pain-free range."},
-"Leg press":{desc:"Machine-based lower-body press.",steps:["Place feet about shoulder-width on platform.","Lower slowly while pelvis stays against pad.","Stop before lower back rounds.","Press up without forcefully locking knees."],tip:"Set safety stops and control the sled."},
-"Romanian deadlift":{desc:"Hip hinge for hamstrings and glutes.",steps:["Hold weights in front of thighs with knees softly bent.","Push hips backward, keeping weights close to legs.","Keep spine neutral and lower until hamstrings stretch.","Drive hips forward to stand."],tip:"Reduce load if your back rounds."},
-"Leg curl":{desc:"Machine exercise for hamstrings.",steps:["Align machine pivot with your knee joint.","Curl pad smoothly toward your body.","Pause without lifting your hips.","Return slowly."],tip:"Adjust the machine to fit comfortably."},
-"Calf raise":{desc:"Lower-leg exercise for calf muscles.",steps:["Stand with feet hip-width apart.","Rise onto the balls of your feet.","Pause, then lower slowly.","Avoid bouncing."],tip:"Use controlled repetitions."},
-"Plank":{desc:"Isometric core exercise.",steps:["Place elbows under shoulders and extend legs behind you.","Keep head, shoulders, hips and heels aligned.","Brace your abdomen and breathe normally.","Stop when you can no longer hold good form."],tip:"Good form matters more than holding for a very long time."}
+let state;
+try{state=JSON.parse(localStorage.getItem('rushFitData'))||defaultState}catch(e){state=defaultState}
+state.settings={...defaultState.settings,...state.settings};
+function day(k=dateKey){
+if(!state.days[k])state.days[k]={foods:[],water:0,habits:{},workout:{done:[],notes:''},checkin:{},activity:{}};
+return state.days[k]
+}
+function save(){localStorage.setItem('rushFitData',JSON.stringify(state))}
+function num(v){return Number(v)||0}
+function safe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(page){
+document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));
+document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===page));
+if(page==='recipes')renderRecipes();
+if(page==='progress')renderProgress();
+window.scrollTo({top:0,behavior:'smooth'})
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>go(b.dataset.page));
+function totals(){
+return day().foods.filter(f=>f.eaten).reduce((a,f)=>({k:a.k+num(f.k),p:a.p+num(f.p),c:a.c+num(f.c),fat:a.fat+num(f.f)}),{k:0,p:0,c:0,fat:0})
+}
+const meals=[
+{name:'Breakfast',time:'7:00 AM',idea:'3 eggs, 40 g dry oats and 1 banana'},
+{name:'Lunch',time:'12:30 PM',idea:'150 g cooked chicken, roti, dal and salad'},
+{name:'Dinner',time:'8:30 PM',idea:'Chicken or paneer, vegetables and roti'}
+];
+const habitItems=[
+['protein','Include a protein source in meals'],
+['steps','Reach your daily steps target'],
+['workout','Complete workout or recovery session'],
+['sleep','Aim for 7–9 hours of sleep']
+];
+function render(){
+$('date').value=dateKey;
+const t=totals(),s=state.settings,d=day();
+$('totalK').textContent=Math.round(t.k);
+$('goalK').textContent='of '+s.k+' kcal';
+$('totalP').textContent=Math.round(t.p)+' g';
+$('goalP').textContent='Target '+s.p+' g';
+$('waterText').textContent=d.water+' ml';
+$('waterGoalText').textContent='Target '+s.w+' ml';
+$('barK').style.width=Math.min(100,t.k/s.k*100)+'%';
+$('barP').style.width=Math.min(100,t.p/s.p*100)+'%';
+$('barW').style.width=Math.min(100,d.water/s.w*100)+'%';
+$('waterPercent').textContent=Math.round(Math.min(100,d.water/s.w*100))+'% of goal';
+$('doneCount').textContent=d.workout.done.length;
+$('barE').style.width=Math.min(100,d.workout.done.length/6*100)+'%';
+$('glasses').innerHTML=Array.from({length:Math.ceil(s.w/250)},(_,i)=>`<div class="glass ${i<Math.floor(d.water/250)?'full':''}" title="${(i+1)*250} ml"></div>`).join('');
+$('mealSummary').innerHTML=meals.map(m=>{
+const fs=d.foods.filter(f=>f.meal===m.name);
+const eaten=fs.filter(f=>f.eaten);
+const kcal=eaten.reduce((a,f)=>a+num(f.k),0);
+return `<div class="food"><div class="row"><h4>${m.name}</h4><span class="pill">${m.time}</span></div><p>${m.idea}</p><p>${fs.length?`${eaten.length} logged as eaten · ${Math.round(kcal)} kcal`:'No food logged yet'}</p><button class="secondary" onclick="openFood('${m.name}')">+ Log ${m.name.toLowerCase()}</button></div>`
+}).join('');
+$('foodList').innerHTML=d.foods.length?d.foods.map(f=>`<div class="food"><div class="row"><div><h4>${safe(f.name)}</h4><p>${safe(f.meal)} · ${safe(f.qty||'portion not specified')}</p></div><span class="pill">${f.eaten?'Eaten':'Planned'}</span></div><p>${f.k} kcal · Protein ${f.p} g · Carbs ${f.c} g · Fat ${f.f} g</p>${f.notes?`<p>${safe(f.notes)}</p>`:''}<div class="actions"><button class="secondary" onclick="toggleEaten('${f.id}')">${f.eaten?'Mark planned':'Mark eaten'}</button><button class="secondary" onclick="editFood('${f.id}')">Edit</button><button class="danger" onclick="deleteFood('${f.id}')">Delete</button></div></div>`).join(''):'<p class="muted">No food logged yet. Log every meal, snack, drink or restaurant meal.</p>';
+$('nK').textContent=Math.round(t.k)+' kcal';$('nP').textContent=Math.round(t.p)+' g';$('nC').textContent=Math.round(t.c)+' g';$('nF').textContent=Math.round(t.fat)+' g';
+$('habits').innerHTML=habitItems.map(([id,label])=>`<label class="check"><input type="checkbox" ${d.habits[id]?'checked':''} onchange="setHabit('${id}',this.checked)"><span>${label}</span></label>`).join('');
+$('quickWeight').value=d.checkin.weight||'';$('quickWaist').value=d.checkin.waist||'';$('quickNotes').value=d.checkin.notes||'';
+renderWorkout();
+}
+function openFood(meal='Lunch',recipe=null){
+$('foodForm').reset();$('foodId').value='';$('foodMeal').value=meal;$('foodEaten').checked=true;
+if(recipe){$('foodName').value=recipe.name;$('foodQty').value=recipe.portion;$('foodK').value=recipe.k;$('foodP').value=recipe.p;$('foodC').value=recipe.c;$('foodF').value=recipe.f;$('foodNotes').value=recipe.ingredients.join(', ')}
+$('foodDialog').showModal()
+}
+function editFood(id){
+const f=day().foods.find(x=>x.id===id);if(!f)return;
+openFood(f.meal);$('foodId').value=f.id;$('foodName').value=f.name;$('foodQty').value=f.qty;$('foodK').value=f.k;$('foodP').value=f.p;$('foodC').value=f.c;$('foodF').value=f.f;$('foodNotes').value=f.notes||'';$('foodEaten').checked=f.eaten
+}
+$('foodForm').onsubmit=e=>{
+e.preventDefault();
+const f={id:$('foodId').value||crypto.randomUUID(),name:$('foodName').value.trim(),meal:$('foodMeal').value,qty:$('foodQty').value,k:num($('foodK').value),p:num($('foodP').value),c:num($('foodC').value),f:num($('foodF').value),notes:$('foodNotes').value.trim(),eaten:$('foodEaten').checked};
+const i=day().foods.findIndex(x=>x.id===f.id);
+if(i>=0)day().foods[i]=f;else day().foods.push(f);
+save();$('foodDialog').close();render()
 };
-
-function persist(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){alert("The browser could not save your data. Export a backup if possible.")}}
-function dayData(date=today()){if(!state.days[date])state.days[date]={workout:"",checks:{},meals:{}};const d=state.days[date];if(!d.checks)d.checks={};if(!d.meals)d.meals={};return d}
-function waterData(date=today()){if(!state.water[date])state.water[date]={total:0,entries:[]};const w=state.water[date];if(!Array.isArray(w.entries))w.entries=[];if(!Number.isFinite(w.total))w.total=0;return w}
-function esc(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function showView(view){document.querySelectorAll(".view").forEach(e=>e.classList.toggle("hidden",e.id!=="view-"+view));document.querySelectorAll("[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===view));if(view==="dashboard")renderDashboard();if(view==="workout")renderWorkout();if(view==="diet")renderDiet();if(view==="water")renderWater();if(view==="progress")renderHistory();window.scrollTo({top:0,behavior:"smooth"})}
-
-function renderWorkout(){const date=document.getElementById("workoutDate").value||today(),d=dayData(date);if(d.workout&&workouts[d.workout])selectedWorkout=d.workout;document.querySelectorAll("[data-day]").forEach(b=>b.classList.toggle("active",b.dataset.day===selectedWorkout));document.getElementById("workoutContent").innerHTML="<h3>"+selectedWorkout+" day</h3><div class=\"exercise-list\">"+workouts[selectedWorkout].map((x,i)=>`<div class="exercise-row"><input type="checkbox" aria-label="Complete ${esc(x[0])}" ${d.checks[selectedWorkout+":"+x[0]]?"checked":""} onchange="toggleExercise(${i},this.checked)"><button class="exercise-name" onclick="showExercise('${esc(x[0])}')"><strong>${esc(x[0])}</strong><span>${esc(x[1])} · Tap for technique</span></button></div>`).join("")+"</div>";d.workout=selectedWorkout;persist();renderDashboard()}
-function toggleExercise(i,checked){const d=dayData(document.getElementById("workoutDate").value||today()),name=workouts[selectedWorkout][i][0];d.workout=selectedWorkout;d.checks[selectedWorkout+":"+name]=checked;persist();renderWorkout()}
-function resetWorkout(){const d=dayData(document.getElementById("workoutDate").value||today());workouts[selectedWorkout].forEach(x=>delete d.checks[selectedWorkout+":"+x[0]]);persist();renderWorkout()}
-function saveWorkout(){dayData(document.getElementById("workoutDate").value||today()).workout=selectedWorkout;persist();alert("Workout saved.");renderDashboard()}
-function showExercise(name){const info=exerciseHelp[name],ex=workouts[selectedWorkout].find(x=>x[0]===name);document.getElementById("exerciseTitle").textContent=name;document.getElementById("exerciseMeta").textContent=ex?selectedWorkout+" day · "+ex[1]:"Exercise guide";document.getElementById("exerciseDescription").textContent=info?info.desc:"Use controlled movement and a comfortable range.";document.getElementById("exerciseSteps").innerHTML=(info?info.steps:["Set up safely.","Move slowly and with control.","Stop if you feel sharp pain."]).map(s=>"<li>"+esc(s)+"</li>").join("");document.getElementById("exerciseTip").textContent=info?info.tip:"Ask a qualified trainer if you are unsure.";const img=document.getElementById("exerciseImage");img.removeAttribute("src");img.classList.add("hidden");document.getElementById("exerciseImageNote").textContent="No demonstration image is configured for this exercise yet.";document.getElementById("exerciseModal").classList.remove("hidden")}
-function closeExercise(){document.getElementById("exerciseModal").classList.add("hidden")}
-
-function renderDiet(){document.querySelectorAll("[data-diet]").forEach(b=>b.classList.toggle("active",b.dataset.diet===selectedDiet));document.getElementById("dietPreferenceLabel").textContent=selectedDiet==="veg"?"Showing vegetarian meals.":"Showing non-vegetarian meals.";const d=dayData();document.getElementById("dietContent").innerHTML=recipes[selectedDiet].map(r=>`<div class="meal"><button class="meal-open" onclick="showRecipe('${r.id}')"><strong>${esc(r.title)} · ${esc(r.name)}</strong><span>Tap to view ingredients, amounts, preparation and nutrition</span><span>Approx. ${r.kcal} kcal · ${r.p} g protein</span></button><div class="meal-check"><input id="check-${r.id}" type="checkbox" ${d.meals[selectedDiet+":"+r.id]?"checked":""} onchange="toggleMeal('${r.id}',this.checked)"><label for="check-${r.id}">Mark this meal complete</label></div></div>`).join("");updateDietStats()}
-function showRecipe(id){const r=recipes[selectedDiet].find(x=>x.id===id);if(!r)return;document.getElementById("detailTitle").textContent=r.title+" — "+r.name;document.getElementById("detailSubtitle").textContent=(selectedDiet==="veg"?"Vegetarian recipe":"Non-vegetarian recipe")+" · one serving";document.getElementById("detailNutrition").innerHTML=`<div class="nutrition-grid"><div class="nutrition-cell"><strong>${r.kcal}</strong><span>Calories kcal</span></div><div class="nutrition-cell"><strong>${r.p} g</strong><span>Protein</span></div><div class="nutrition-cell"><strong>${r.c} g</strong><span>Carbs</span></div><div class="nutrition-cell"><strong>${r.f} g</strong><span>Fat</span></div></div><p class="sub">Estimated nutrition for the full serving.</p>`;document.getElementById("detailIngredients").innerHTML=r.ingredients.map(i=>"<li>"+esc(i)+"</li>").join("");document.getElementById("detailSteps").innerHTML=r.steps.map(s=>"<li>"+esc(s)+"</li>").join("");document.getElementById("detailTip").textContent=r.tip;document.getElementById("detailModal").classList.remove("hidden")}
-function closeModal(){document.getElementById("detailModal").classList.add("hidden")}
-function toggleMeal(id,checked){dayData().meals[selectedDiet+":"+id]=checked;persist();updateDietStats();renderDashboard()}
-function uncheckMeals(){const d=dayData();recipes[selectedDiet].forEach(r=>delete d.meals[selectedDiet+":"+r.id]);persist();renderDiet();renderDashboard()}
-function updateDietStats(){const d=dayData(),list=recipes[selectedDiet],done=list.filter(r=>d.meals[selectedDiet+":"+r.id]);document.getElementById("dietProtein").textContent=done.reduce((s,r)=>s+r.p,0)+" g";document.getElementById("proteinTargetLabel").textContent=state.settings.proteinTarget+" g";document.getElementById("mealsDone").textContent=done.length+"/"+list.length}
-function renderDashboard(){const d=dayData(),w=waterData(),day=d.workout||"Push",list=workouts[day]||workouts.Push,food=recipes[selectedDiet],protein=food.filter(r=>d.meals[selectedDiet+":"+r.id]).reduce((s,r)=>s+r.p,0),exDone=list.filter(x=>d.checks[day+":"+x[0]]).length,mealDone=food.filter(r=>d.meals[selectedDiet+":"+r.id]).length,total=list.length+food.length,done=exDone+mealDone,pct=Math.round(done/total*100);document.getElementById("todayLabel").textContent=new Date(today()+"T12:00:00").toLocaleDateString(undefined,{weekday:"long",month:"short",day:"numeric",year:"numeric"});document.getElementById("dashWorkout").textContent=day;document.getElementById("dashWater").textContent=w.total+" ml";document.getElementById("dashWaterBig").textContent=w.total.toLocaleString()+" ml";document.getElementById("dashWaterTarget").textContent=state.settings.waterTarget;document.getElementById("dashProtein").textContent=protein+" g";document.getElementById("dayProgress").style.width=pct+"%";document.getElementById("progressText").textContent=pct+"% complete · "+done+" of "+total+" checklist items";document.getElementById("dashboardMeals").innerHTML=food.map(r=>`<div class="meal"><button class="meal-open" onclick="showRecipe('${r.id}')"><strong>${esc(r.title)} · ${esc(r.name)}</strong><span>${r.kcal} kcal · ${r.p} g protein · Tap for recipe</span></button></div>`).join("")}
-
-function addWater(n){const w=waterData();w.total+=n;w.entries.push(n);persist();renderWater();renderDashboard()}
-function addCustomWater(){const n=Number(document.getElementById("customWater").value);if(n<1||n>3000){alert("Enter 1–3000 ml.");return}addWater(n)}
-function undoWater(){const w=waterData(),n=w.entries.pop();if(!n){alert("No entry to undo.");return}w.total=Math.max(0,w.total-n);persist();renderWater();renderDashboard()}
-function resetWater(){if(!confirm("Reset today's water?"))return;state.water[today()]={total:0,entries:[]};persist();renderWater();renderDashboard()}
-function renderWater(){const w=waterData(),target=Number(state.settings.waterTarget)||2500,pct=Math.min(100,Math.round(w.total/target*100));document.getElementById("waterDateLabel").textContent="Date: "+today();document.getElementById("waterTotal").textContent=w.total.toLocaleString();document.getElementById("waterProgress").style.width=pct+"%";document.getElementById("waterProgressText").textContent=pct+"% of "+target+" ml target"}
-function saveSettings(){const s={waterTarget:Number(document.getElementById("waterTarget").value),reminderMinutes:Number(document.getElementById("reminderMinutes").value),proteinTarget:Number(document.getElementById("proteinTarget").value),calorieTarget:Number(document.getElementById("calorieTarget").value),diet:selectedDiet};if(s.waterTarget<250||s.reminderMinutes<15||s.reminderMinutes>240||s.proteinTarget<40||s.proteinTarget>300||s.calorieTarget<800||s.calorieTarget>6000){alert("Please check your targets and reminder interval.");return}state.settings=s;persist();renderDashboard();renderWater();updateDietStats();document.getElementById("reminderStatus").textContent="Settings saved."}
-function startReminders(){stopReminders();const mins=Number(state.settings.reminderMinutes)||60;const run=()=>{timer=setInterval(()=>{const msg="Water reminder: drink water if you need it and log your intake.";document.getElementById("reminderStatus").textContent=msg;if("Notification"in window&&Notification.permission==="granted"){try{new Notification("Water reminder",{body:msg})}catch(e){}}else alert(msg)},mins*60000)};if("Notification"in window&&Notification.permission==="default")Notification.requestPermission().then(run);else run();document.getElementById("reminderStatus").textContent="Reminder started while this page is active."}
-function stopReminders(){if(timer)clearInterval(timer);timer=null;const e=document.getElementById("reminderStatus");if(e)e.textContent="Reminders stopped."}
-
-function saveProgress(){const date=document.getElementById("logDate").value||today(),wr=document.getElementById("weight").value,wa=document.getElementById("waist").value,hi=document.getElementById("hips").value,notes=document.getElementById("notes").value.trim();if(!wr&&!wa&&!hi&&!notes){alert("Enter at least one measurement or note.");return}const r={date,weight:wr===""?null:Number(wr),waist:wa===""?null:Number(wa),hips:hi===""?null:Number(hi),notes},i=state.progress.findIndex(x=>x.date===date);if(i>=0)state.progress[i]=r;else state.progress.push(r);state.progress.sort((a,b)=>b.date.localeCompare(a.date));persist();renderHistory();document.getElementById("backupStatus").textContent="Progress saved."}
-function renderHistory(){const el=document.getElementById("historyList");if(!state.progress.length){el.innerHTML='<p class="sub">No progress entries yet.</p>';return}el.innerHTML=state.progress.map((r,i)=>`<div class="history-item"><strong>${esc(r.date)}</strong><p class="sub">${[r.weight!=null?"Weight: "+esc(r.weight)+" kg":"",r.waist!=null?"Waist: "+esc(r.waist)+" cm":"",r.hips!=null?"Hips: "+esc(r.hips)+" cm":"",r.notes?esc(r.notes):""].filter(Boolean).join(" · ")}</p><button class="danger small" onclick="deleteProgress(${i})">Delete entry</button></div>`).join("")}
-function deleteProgress(i){if(!confirm("Delete this entry?"))return;state.progress.splice(i,1);persist();renderHistory()}
-function download(name,content,type){const a=document.createElement("a"),url=URL.createObjectURL(new Blob([content],{type}));a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
-function exportData(){download("fitness-backup-"+today()+".json",JSON.stringify(state,null,2),"application/json");document.getElementById("backupStatus").textContent="Backup export requested."}
-function exportCSV(){const rows=[["Date","Weight kg","Waist cm","Hips cm","Notes"],...state.progress.map(r=>[r.date,r.weight??"",r.waist??"",r.hips??"",r.notes??""])];download("fitness-progress-"+today()+".csv",rows.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(",")).join("\r\n"),"text/csv;charset=utf-8")}
-function clearData(){if(!confirm("Delete all fitness data saved in this browser?"))return;stopReminders();state=defaults();selectedDiet="veg";persist();init();renderAll()}
-function init(){document.getElementById("workoutDate").value=today();document.getElementById("logDate").value=today();document.getElementById("waterTarget").value=state.settings.waterTarget;document.getElementById("reminderMinutes").value=state.settings.reminderMinutes;document.getElementById("proteinTarget").value=state.settings.proteinTarget;document.getElementById("calorieTarget").value=state.settings.calorieTarget}
-function renderAll(){renderDashboard();renderWorkout();renderDiet();renderWater();renderHistory()}
-
-document.querySelectorAll("[data-view]").forEach(b=>b.addEventListener("click",()=>showView(b.dataset.view)));
-document.querySelectorAll("[data-day]").forEach(b=>b.addEventListener("click",()=>{selectedWorkout=b.dataset.day;dayData(document.getElementById("workoutDate").value||today()).workout=selectedWorkout;persist();renderWorkout()}));
-document.querySelectorAll("[data-diet]").forEach(b=>b.addEventListener("click",()=>{selectedDiet=b.dataset.diet;state.settings.diet=selectedDiet;persist();renderDiet();renderDashboard()}));
-document.getElementById("workoutDate").addEventListener("change",renderWorkout);
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeModal();closeExercise()}});
-init();renderAll();
+function toggleEaten(id){const f=day().foods.find(x=>x.id===id);if(f){f.eaten=!f.eaten;save();render()}}
+function deleteFood(id){if(confirm('Delete this food entry?')){day().foods=day().foods.filter(f=>f.id!==id);save();render()}}
+function changeWater(amount){day().water=Math.max(0,Math.min(15000,day().water+amount));save();render()}
+function setHabit(id,v){day().habits[id]=v;save();render()}
+$('quickForm').onsubmit=e=>{
+e.preventDefault();day().checkin={weight:$('quickWeight').value,waist:$('quickWaist').value,notes:$('quickNotes').value};
+save();render();alert('Check-in saved')
+};
+$('date').onchange=()=>{dateKey=$('date').value||today();render()};
+const workoutPlan=[
+{title:'Monday — Push A',desc:'Chest, shoulders and triceps',ex:[['Bench press','3 × 6–10','Keep shoulder blades stable; lower the bar under control.'],['Incline dumbbell press','3 × 8–12','Use a comfortable range and avoid bouncing.'],['Shoulder press','3 × 8–12','Brace your core; do not overarch your back.'],['Lateral raises','3 × 12–15','Lift smoothly with a slight elbow bend.'],['Triceps pushdown','3 × 10–15','Keep elbows close to your sides.']]},
+{title:'Tuesday — Pull A',desc:'Back and biceps',ex:[['Lat pulldown','3 × 8–12','Pull toward the upper chest; avoid swinging.'],['Seated cable row','3 × 8–12','Pull elbows back and keep your torso steady.'],['Chest-supported row','3 × 8–12','Move your elbows back without shrugging.'],['Face pulls','2 × 12–15','Pull toward your face with controlled movement.'],['Dumbbell curls','3 × 10–12','Keep upper arms steady.']]},
+{title:'Wednesday — Legs + Core A',desc:'Lower body and abdominal strength',ex:[['Squat or leg press','3 × 8–12','Keep feet stable and knees tracking with toes.'],['Romanian deadlift','3 × 8–12','Hinge at hips; keep weights close to legs.'],['Leg curl','3 × 10–15','Control both lifting and lowering.'],['Calf raises','3 × 12–20','Use a full, comfortable range.'],['Plank','3 × 30–45 sec','Keep a straight line from head to heels.'],['Dead bug','3 × 8 each side','Keep lower back gently against the floor.']]},
+{title:'Thursday — Push B',desc:'Alternate chest, shoulders and triceps',ex:[['Incline press','3 × 8–12','Use controlled reps and stable shoulders.'],['Machine chest press','3 × 8–12','Do not lock elbows aggressively.'],['Dumbbell shoulder press','3 × 8–12','Choose a pain-free range.'],['Lateral raises','3 × 12–15','Avoid momentum.'],['Overhead triceps extension','3 × 10–15','Keep elbows comfortable and controlled.']]},
+{title:'Friday — Pull B',desc:'Back, rear delts and biceps',ex:[['Assisted pull-up or pulldown','3 × 8–12','Use assistance if needed; avoid swinging.'],['One-arm dumbbell row','3 × 8–12 each','Keep torso supported and pull toward hip.'],['Cable row','3 × 10–12','Pause briefly without leaning back.'],['Rear-delt fly','3 × 12–15','Move arms out with light weights.'],['Hammer curls','3 × 10–12','Keep wrists neutral.']]},
+{title:'Saturday — Legs + Core B',desc:'Legs, core and optional light cardio',ex:[['Leg press','3 × 8–12','Use a comfortable depth.'],['Hip thrust','3 × 8–12','Finish by squeezing glutes, not arching back.'],['Leg extension','3 × 10–15','Move smoothly and avoid kicking.'],['Seated leg curl','3 × 10–15','Control the return.'],['Reverse crunch','3 × 10–15','Curl pelvis gently without swinging.'],['Side plank','2 × 20–40 sec each','Keep hips lifted and body aligned.']]},
+{title:'Sunday — Recovery',desc:'Rest, walking and gentle mobility',ex:[['Easy walk','20–40 minutes','Use a pace that allows comfortable conversation.'],['Gentle mobility','5–10 minutes','Move within a comfortable range; do not force stretches.']]}
+];
+function workoutIndex(){
+const d=new Date(dateKey+'T12:00:00');
+return (d.getDay()+6)%7
+}
+function renderWorkout(){
+const w=workoutPlan[workoutIndex()],d=day();
+$('workoutTitle').textContent=w.title;$('workoutDesc').textContent=w.desc;
+$('workoutPill').textContent=workoutIndex()===6?'Recovery':'Strength';
+$('workoutNotes').value=d.workout.notes||'';
+$('exerciseList').innerHTML=w.ex.map((x,i)=>`<div class="exercise"><label class="check"><input type="checkbox" ${d.workout.done.includes(i)?'checked':''} onchange="toggleExercise(${i},this.checked)"><span><b>${x[0]}</b><span class="muted">${x[1]}</span><span class="muted">${x[2]}</span></span></label></div>`).join('');
+}
+function toggleExercise(i,v){const a=day().workout.done;day().workout.done=v?[...new Set([...a,i])]:a.filter(n=>n!==i);save();render()}
+function resetWorkout(){if(confirm('Reset today’s workout checklist?')){day().workout.done=[];save();render()}}
+function saveWorkoutNotes(){day().workout.notes=$('workoutNotes').value;save();alert('Workout notes saved')}
+const recipes=[
+{id:'eggs',name:'Eggs, oats and banana',meal:'Breakfast',portion:'3 eggs, 40 g dry oats, 1 banana',k:480,p:28,c:53,f:17,mins:10,ingredients:['3 whole eggs','40 g dry oats','1 medium banana','Water or cinnamon for oats'],steps:['Cook oats with water until soft.','Boil or scramble eggs using minimal oil.','Serve with banana.'],tip:'For fewer calories, measure cooking oil carefully.'},
+{id:'omelette',name:'Vegetable omelette',meal:'Breakfast',portion:'3 eggs with vegetables and 2 bread slices',k:430,p:27,c:38,f:18,mins:12,ingredients:['3 eggs','Tomato, onion and spinach','2 bread slices','Minimal oil'],steps:['Chop vegetables.','Cook vegetables in a non-stick pan.','Add beaten eggs and cook thoroughly.','Serve with toast.'],tip:'Add egg whites for extra protein with less fat.'},
+{id:'yogurt',name:'High-protein oats bowl',meal:'Breakfast',portion:'Oats, curd and fruit',k:390,p:24,c:52,f:9,mins:5,ingredients:['40 g oats','200 g high-protein or strained yogurt','1 small fruit','Cinnamon'],steps:['Mix oats and yogurt.','Add chopped fruit and cinnamon.','Refrigerate overnight or eat immediately.'],tip:'Protein varies substantially by yogurt brand.'},
+{id:'chicken',name:'Chicken roti and dal',meal:'Lunch',portion:'150 g cooked chicken, 2 small rotis, 100 g cooked dal',k:620,p:57,c:65,f:12,mins:30,ingredients:['150 g cooked chicken breast','60 g atta for rotis','100 g cooked dal','Salad','Up to 5 g oil'],steps:['Season chicken with spices, lemon and salt.','Cook chicken thoroughly in a pan or grill.','Prepare rotis from measured atta.','Serve with dal and salad.'],tip:'Cooked chicken should reach a safe internal temperature.'},
+{id:'khichdi',name:'Protein dal khichdi with paneer',meal:'Lunch',portion:'Rice, dal and 100 g paneer',k:590,p:32,c:72,f:17,mins:30,ingredients:['40 g dry rice','50 g dry moong dal','100 g paneer','Mixed vegetables','Spices and measured oil'],steps:['Wash rice and dal.','Pressure-cook with vegetables, spices and water.','Roast paneer in a non-stick pan.','Serve paneer beside the khichdi.'],tip:'For lower calories, use reduced-fat paneer or tofu.'},
+{id:'soya',name:'Soya chunk pulao',meal:'Lunch',portion:'50 g dry soya chunks and rice',k:510,p:32,c:72,f:9,mins:25,ingredients:['50 g dry soya chunks','50 g dry rice','Peas, carrots and onion','Spices','Measured oil'],steps:['Soak and boil soya chunks, then squeeze out water.','Cook rice with vegetables and spices.','Mix in soya chunks and cook until heated through.'],tip:'Nutrition varies by soya brand and rice portion.'},
+{id:'paneer',name:'Paneer vegetable bowl',meal:'Dinner',portion:'150 g paneer with vegetables',k:460,p:29,c:25,f:25,mins:20,ingredients:['150 g paneer','250 g mixed vegetables','Spices','Up to 5 g oil'],steps:['Cut paneer and vegetables.','Cook vegetables in a pan with spices.','Add paneer and cook until hot.'],tip:'Add roti or rice according to your calorie target.'},
+{id:'fish',name:'Fish, roti and vegetables',meal:'Dinner',portion:'150 g cooked fish, roti and vegetables',k:440,p:39,c:38,f:12,mins:25,ingredients:['150 g fish','30–60 g atta depending on target','200 g vegetables','Lemon, spices and measured oil'],steps:['Season fish with lemon and spices.','Bake, grill or pan-cook with minimal oil.','Prepare roti and vegetables.','Serve together.'],tip:'Fish protein and fat depend on the species used.'},
+{id:'tofu',name:'Tofu rice bowl',meal:'Dinner',portion:'200 g tofu with rice and vegetables',k:470,p:27,c:52,f:15,mins:20,ingredients:['200 g tofu','50 g dry rice','200 g vegetables','Soy sauce or spices'],steps:['Cook rice.','Cube tofu and brown in a non-stick pan.','Stir-fry vegetables and combine with tofu and rice.'],tip:'Check tofu nutrition on the package.'},
+{id:'sprouts',name:'Sprouts and roasted chana bowl',meal:'Snack',portion:'Sprouts, vegetables and 30 g chana',k:280,p:15,c:43,f:5,mins:10,ingredients:['150 g safely prepared sprouts','30 g roasted chana','Cucumber, tomato and onion','Lemon and spices'],steps:['Wash and chop vegetables.','Mix with sprouts and roasted chana.','Add lemon and spices.'],tip:'Sprouts can carry harmful bacteria; cook them thoroughly if food safety is a concern.'}
+];
+function renderRecipes(){
+const q=$('recipeSearch').value.toLowerCase(),f=$('recipeFilter').value;
+const list=recipes.filter(r=>(f==='all'||r.meal===f)&&r.name.toLowerCase().includes(q));
+$('recipeList').innerHTML=list.map(r=>`<div class="recipe"><div class="row"><div><h4>${r.name}</h4><span class="pill">${r.meal}</span></div><b>${r.k} kcal</b></div><p>${r.portion}</p><p><b>${r.p} g protein</b> · ${r.c} g carbs · ${r.f} g fat · ${r.mins} min</p><details><summary>Ingredients & preparation</summary><b>Ingredients</b><ul>${r.ingredients.map(x=>`<li>${safe(x)}</li>`).join('')}</ul><b>Steps</b><ol>${r.steps.map(x=>`<li>${safe(x)}</li>`).join('')}</ol><p>${safe(r.tip)}</p></details><div class="actions"><button onclick="openFood('${r.meal}',recipes.find(x=>x.id==='${r.id}'))">Add to food diary</button></div></div>`).join('')||'<p class="muted">No recipes match your search.</p>'
+}
+function renderProgress(){
+const entries=Object.entries(state.days).filter(([k,d])=>d.checkin&&num(d.checkin.weight)>0).sort((a,b)=>a[0].localeCompare(b[0]));
+$('history').innerHTML=entries.length?entries.slice().reverse().map(([k,d])=>`<div class="food"><div class="row"><b>${safe(k)}</b><b>${d.checkin.weight} kg</b></div><p>${d.checkin.waist?`Waist: ${d.checkin.waist} cm · `:''}${safe(d.checkin.notes||'')}</p></div>`).join(''):'<p class="muted">No check-ins yet. Add your first weight entry below.</p>';
+const canvas=$('weightChart'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+if(entries.length){
+const vals=entries.map(x=>num(x[1].checkin.weight)),lo=Math.min(...vals)-1,hi=Math.max(...vals)+1;
+ctx.strokeStyle='#43885b';ctx.lineWidth=3;ctx.beginPath();
+vals.forEach((v,i)=>{const x=25+i*(canvas.width-50)/Math.max(1,vals.length-1),y=180-(v-lo)/(hi-lo||1)*140;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});
+ctx.stroke();vals.forEach((v,i)=>{const x=25+i*(canvas.width-50)/Math.max(1,vals.length-1),y=180-(v-lo)/(hi-lo||1)*140;ctx.fillStyle='#173e2d';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill()});
+ctx.fillStyle='#718078';ctx.font='12px system-ui';ctx.fillText(vals[0]+' kg',10,20);ctx.fillText(vals[vals.length-1]+' kg',canvas.width-70,20)
+}else{ctx.fillStyle='#718078';ctx.font='14px system-ui';ctx.fillText('Your weight chart will appear after your first check-in.',15,90)}
+}
+$('progressForm').onsubmit=e=>{
+e.preventDefault();const k=$('progressDate').value;const d=day(k);d.checkin={...d.checkin,weight:$('progressWeight').value,waist:$('progressWaist').value,notes:$('progressNotes').value};save();dateKey=k;render();renderProgress();alert('Progress saved')
+};
+$('settingsForm').onsubmit=e=>{
+e.preventDefault();state.settings={k:num($('sK').value),p:num($('sP').value),c:num($('sC').value),f:num($('sF').value),w:num($('sW').value),s:num($('sS').value)};save();render();alert('Targets updated')
+};
+$('activityForm').onsubmit=e=>{
+e.preventDefault();day().activity={steps:$('steps').value,sleep:$('sleep').value,minutes:$('minutes').value};
+save();$('activitySummary').textContent=`Saved: ${$('steps').value||0} steps · ${$('sleep').value||0} hours sleep · ${$('minutes').value||0} workout minutes`;render()
+};
+function fillSettings(){
+const s=state.settings;$('sK').value=s.k;$('sP').value=s.p;$('sC').value=s.c;$('sF').value=s.f;$('sW').value=s.w;$('sS').value=s.s;
+}
+function exportData(){
+const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+a.href=url;a.download='rushikesh-fit-backup.json';a.click();URL.revokeObjectURL(url)
+}
+$('importFile').onchange=async e=>{
+const f=e.target.files[0];if(!f)return;
+try{const d=JSON.parse(await f.text());if(!d.settings||!d.days)throw Error('Invalid backup');if(confirm('Replace current tracker data with this backup?')){state=d;save();fillSettings();render();alert('Backup restored')}}catch(err){alert('Unable to import: '+err.message)}
+e.target.value=''
+};
+function clearToday(){if(confirm('Clear all data for this selected date? Export a backup first if needed.')){delete state.days[dateKey];save();render()}}
+function renderAll(){fillSettings();render();renderRecipes();renderProgress()}
+$('progressDate').value=dateKey;
+renderAll();
 </script>
 </body>
 </html>
